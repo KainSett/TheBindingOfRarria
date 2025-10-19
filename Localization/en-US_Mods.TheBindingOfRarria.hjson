@@ -1530,3 +1530,15 @@ NPCs: {
 		FlavorText: Unstoppable force that is only capable of endlessly swinging.
 	}
 }
+
+ArtifactSets: {
+	Info: {
+		Closed: " (press shift for info)"
+		Open: " "
+	}
+
+	Paladin: {
+		Name: Paladin
+		Effect: Life regeneration is 50% more effective while invincible
+	}
+}
