@@ -31,6 +31,8 @@ public class HomingMissile : ModProjectile
 
     public override void AI()
     {
+        Projectile.rotation = Projectile.velocity.ToRotation() + PiOver2;
+
         if (Projectile.timeLeft % 5 == 0 && (Projectile.ai[0] == -1 || !Main.npc[(int)Projectile.ai[0]].active))
         {
             var distanceSQ = 600 * 600f;
@@ -47,8 +49,7 @@ public class HomingMissile : ModProjectile
         if (Projectile.ai[0] == -1 || !Main.npc[(int)Projectile.ai[0]].active || Projectile.timeLeft > 345)
             return;
 
-        Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.velocity.ToRotation().AngleLerp(Projectile.Center.DirectionTo(Main.npc[(int)Projectile.ai[0]].Center).ToRotation(), 0.09f) - Projectile.velocity.ToRotation());
-        Projectile.rotation = Projectile.velocity.ToRotation() + PiOver2;
+        Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.velocity.ToRotation().AngleLerp(Projectile.Center.DirectionTo(Main.npc[(int)Projectile.ai[0]].Center).ToRotation(), 0.12f) - Projectile.velocity.ToRotation());
     }
 
     public override bool? CanHitNPC(NPC target)
@@ -67,9 +68,11 @@ public class HomingMissile : ModProjectile
             lightColor = Color.Purple;
         else if (Projectile.ai[1] == 2)
             lightColor = Color.Red;
+        else if (Projectile.ai[1] == 3)
+            lightColor = Color.Plum;
 
 
-            Color color = lightColor;
+        Color color = lightColor;
 
         for (int i = 0; i < Projectile.oldPos.Length - 1; i++)
             Main.spriteBatch.DrawPixellated(texture, Projectile.oldPos[i] - Main.screenPosition + Projectile.Size / 2, null, Projectile.scale - 0.02f * i, Projectile.oldRot[i], texture.Size() / 2, color with { A = (byte)(150 - i * 5)}, Common.Systems.PixellationSystem.RenderType.Additive, Common.Systems.PixellationSystem.RenderLayer.Projectiles);

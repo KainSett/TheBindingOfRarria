@@ -54,6 +54,9 @@ public class HandBallista : ModItem
 
     public override void HoldItem(Player player)
     {
+        if (Main.myPlayer != player.whoAmI)
+            return;
+
         if (player.ItemAnimationActive)
         {
             var p = Main.projectile.FirstOrDefault(t => t.active && t.owner == player.whoAmI && t.type == ModContent.ProjectileType<HandBallistaProj>());
@@ -86,6 +89,9 @@ public class HandBallista : ModItem
 
     public override void UseAnimation(Player player)
     {
+        if (Main.myPlayer != player.whoAmI)
+            return;
+
         var mousePos = Main.MouseWorld;
         var proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse_WithPotentialAmmo(Item, AmmoID.Arrow), player.Center + player.Center.DirectionTo(mousePos) * 15 + new Vector2(0, 5), player.Center.DirectionTo(mousePos), ModContent.ProjectileType<HandBallistaProj>(), 0, 0);
         

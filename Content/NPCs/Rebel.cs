@@ -5,8 +5,10 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.Personalities;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.Localization;
+using TheBindingOfRarria.Content.Items;
 using TheBindingOfRarria.Content.Projectiles;
 
 
@@ -26,9 +28,10 @@ public class Rebel : ModNPC
         // Influences how the NPC looks in the Bestiary
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
         {
-            PortraitScale = 0.6f, // Portrait refers to the full picture when clicking on the icon in the bestiary
+            PortraitScale = 1f, // Portrait refers to the full picture when clicking on the icon in the bestiary
             PortraitPositionYOverride = 0f,
         };
+        
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
     }
 
@@ -37,30 +40,38 @@ public class Rebel : ModNPC
         NPC.width = 50;
         NPC.height = 100;
         NPC.damage = 12;
-        NPC.defense = 10;
-        NPC.lifeMax = 2000;
+        NPC.defense = 8;
+        NPC.lifeMax = 1600;
         NPC.HitSound = SoundID.NPCHit4;
         NPC.DeathSound = SoundID.NPCDeath6;
         NPC.knockBackResist = 0f;
-        NPC.value = Item.buyPrice(gold: 5);
-        NPC.rarity = 3;
-        NPC.npcSlots = 5f; // Take up open spawn slots, preventing random NPCs from spawning during the fight
+        NPC.value = Item.buyPrice(gold: 2);
+        NPC.rarity = 3; 
+        NPC.npcSlots = 5f;
 
         NPC.aiStyle = -1;
     }
 
+    public override float SpawnChance(NPCSpawnInfo spawnInfo)
+    {
+        if (spawnInfo.SpawnTileType is TileID.BlueDungeonBrick or TileID.GreenDungeonBrick or TileID.PinkDungeonBrick && Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY - 1].WallType == 0)
+            return 0.4f;
+
+        return 0;
+    }
+    
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
     {
         // Sets the description of this NPC that is listed in the bestiary
-        bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
-                new MoonLordPortraitBackgroundProviderBestiaryInfoElement(), // Plain black background
+        bestiaryEntry.Info.AddRange([
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheDungeon,
 				new FlavorTextBestiaryInfoElement("Mods.TheBindingOfRarria.NPCs.Rebel.FlavorText")
-            });
+            ]);
     }
 
     public override void ModifyNPCLoot(NPCLoot npcLoot)
     {
-        //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<YorghsRing>(), 4));
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<YorghsRing>(), 4));
     }
 
     public override void OnKill()
@@ -76,12 +87,6 @@ public class Rebel : ModNPC
 
     public override void HitEffect(NPC.HitInfo hit)
     {
-        if (Main.netMode == NetmodeID.Server)
-        {
-            // We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
-            return;
-        }
-
         if (NPC.life <= 0)
         {
             for (int i = 0; i < 6; i++)
@@ -168,7 +173,7 @@ public class Rebel : ModNPC
                 break;
         }
 
-        for (int x = 0; x < NPC.width / 16f; x++)
+        for (int x = 0; x < NPC.width / 16f + 0.9f; x++)
             for (int y = 0; y < NPC.height / 16f - 1; y++)
                 if (WorldGen.SolidOrSlopedTile(Main.tile[(NPC.position + NPC.velocity).ToTileCoordinates() + new Point(x, y)]))
                     state = State.Teleport;

@@ -1228,7 +1228,7 @@ Items: {
 	}
 
 	GhizaWheel: {
-		DisplayName: Ghiza Wheel
+		DisplayName: Ghiza's Wheel
 		Tooltip:
 			'''
 			Critical hits steal enemy's max life
@@ -1306,6 +1306,26 @@ Items: {
 	CurveSickle: {
 		DisplayName: Curve Sickle
 		Tooltip: "'Radial sharpbone used by skilled hunters as a weapon'"
+	}
+
+	AetherRose: {
+		DisplayName: Aether Rose
+		Tooltip:
+			'''
+			Whenever your mana falls below 50%, you shoot out {0} homing missiles
+			This ability only recharges when your mana is full again
+			'Aethereal beauty'
+			'''
+	}
+
+	YorghsRing: {
+		DisplayName: Yorgh's Sigil
+		Tooltip:
+			'''
+			Press {0} to parry if you have a shield equipped 
+			Your parries also reflect projectiles
+			'Wasn't it supposed to be a ring?'
+			'''
 	}
 }
 
@@ -1465,10 +1485,9 @@ Keybinds: {
 	BrokenWatch.DisplayName: Broken Watch
 	CursedBlood.DisplayName: Cursed Blood
 	AbsorbingLiquid.DisplayName: Absorbing Liquid
-	CrystalHeart.DisplayName: Crystal Heart
-	Sangreal.DisplayName: Sangreal
 	BloodhoundDash.DisplayName: Bloodhound Dash
 	GoldenRetaliation.DisplayName: Golden Retaliation
+	Parry.DisplayName: Yorgh's Sigil
 }
 
 Tiles: {
@@ -1505,4 +1524,9 @@ Configs: {
 	}
 }
 
-NPCs.Rebel.DisplayName: Rebel
+NPCs: {
+	Rebel: {
+		DisplayName: Rebel Knight
+		FlavorText: Unstoppable force that is only capable of endlessly swinging.
+	}
+}
