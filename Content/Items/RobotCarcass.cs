@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TheBindingOfRarria.Common.Helpers;
+using TheBindingOfRarria.Content.ArtifactSets;
 
 namespace TheBindingOfRarria.Content.Items;
 
@@ -21,6 +24,11 @@ public class RobotCarcass : ModItem
     {
         player.GetModPlayer<RobotConversionPlayer>().Robot = true;
         player.statDefense += player.GetModPlayer<RobotConversionPlayer>().counter * 3;
+    }
+
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        tooltips.InsertArtifactSetBonusTooltip(Type);
     }
 }
 
@@ -87,6 +95,8 @@ public class RobotConversionPlayer : ModPlayer
     public override void UpdateBadLifeRegen()
     {
         if (Robot)
-            Player.lifeRegen -= counter;
+            Player.lifeRegen -= counter / (Player.GetModPlayer<Android>().android ? 2 : 1);
+
+        Player.GetModPlayer<Android>().android = false;
     }
 }

@@ -38,21 +38,36 @@ public class DivergentsFist : ModItem
 public class YujiItemPlayer : ModPlayer
 {
     public Item Fist = null;
+    
     public int counter = 0;
+
+    public int reducedDefense = 0;
 
     public override void ResetEffects() => Fist = null;
 
-    public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
+    public override void PostUpdateEquips()
     {
-        if (Fist != null && counter <= 0)
+        if (reducedDefense > 0 && counter > 0)
+        {
+            Player.statDefense -= reducedDefense;
+
+            if (counter % 9 == 0)
+                reducedDefense--;
+        }
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+    {
+        if (Fist != null && counter <= 0 && (hit.DamageType == DamageClass.Melee || hit.DamageType == DamageClass.MeleeNoSpeed))
         {
             counter = 180;
+            reducedDefense = Player.statDefense / 10;
             Vector2 offset = target.Center.DirectionTo(Player.Center) * target.Hitbox.Size() * 0.5f;
 
             if (Main.myPlayer != Player.whoAmI)
                 return;
 
-            Projectile.NewProjectile(Player.GetSource_Accessory(Fist, "Yuji fist attack"), target.Center + offset, -offset, ModContent.ProjectileType<CEFist>(), Player.statManaMax2 / 10, 5, Player.whoAmI, target.whoAmI, offset.X, offset.Y);
+            Projectile.NewProjectile(Player.GetSource_Accessory(Fist, "Yuji fist attack"), target.Center + offset, -offset, ModContent.ProjectileType<CEFist>(), Player.statDefense / 5, 5, Player.whoAmI, target.whoAmI, offset.X, offset.Y);
         }
     }
 }

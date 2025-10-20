@@ -79,6 +79,7 @@ public class ArtifactSetPlayer : ModPlayer
 
     public override void Initialize()
     {
+        Sets.Clear();
         foreach (var set in ArtifactSetSystem.ArtifactSets)
         {
             Sets.Add(set, 0);

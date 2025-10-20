@@ -512,8 +512,8 @@ Items: {
 		DisplayName: Divergent's Fist
 		Tooltip:
 			'''
-			Your melee swings deliver a follow-up hit after a delay
-			'One step closer to hitting a black flash'
+			Your melee attacks briefly sacrifice 10% of your defense, in return for delivering a follow-up hit which deals twice the amount of defense sacrificed damage after a delay
+			'One step closer to hitting a Awakening'
 			'''
 	}
 
@@ -902,7 +902,7 @@ Items: {
 			'''
 			Converts half of your life regeneration to defense
 			Every 0.5 hp/s is converted to 3 defense
-			'A remnant of some clanker'
+			'A remnant of some droid'
 			'''
 	}
 
@@ -1532,13 +1532,45 @@ NPCs: {
 }
 
 ArtifactSets: {
-	Info: {
-		Closed: " (press shift for info)"
-		Open: " "
-	}
+	Info.Closed: " (press shift for info)"
 
 	Paladin: {
 		Name: Paladin
 		Effect: Life regeneration is 50% more effective while invincible
+	}
+
+	Instinct: {
+		Name: Instinct
+		Effect: Longclaw's effects are doubled during Beast Crest's effect
+		Additional: Both effects are doubled for the duration of Beast Crest's effect
+	}
+
+	Android: {
+		Name: Android
+		Effect: Robot Carcass reduces life regeneration by half of the intended amount
+		Additional: Reduces life regeneration by half of the intended amount
+	}
+
+	Cryonics: {
+		Name: Cryonics
+		Effect: Frozen Shell's effect is also active while Ice Bag's effect is active
+		Additional: Also activates Frozen Shell's effect
+	}
+
+	Doctrine: {
+		Name: Doctrine
+		Effect: Multibinder's effect heals for 150% of the original amount
+		Additional: The additional activation heals for 150% instead of 85%
+	}
+
+	Spiritualism: {
+		Name: Spiritualism
+		Effect: Boundless Spirit's activation also resets Unending Despair's cooldown
+		Additional: Activation also resets Unending Despair's cooldown
+	}
+
+	Genocide: {
+		Name: Genocide
+		Effect: First hit against an enemy has an 8% chance to instakill it
 	}
 }

@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
+using TheBindingOfRarria.Common.Helpers;
+using TheBindingOfRarria.Content.ArtifactSets;
 using TheBindingOfRarria.Content.Projectiles;
 
 namespace TheBindingOfRarria.Content.Items;
@@ -23,6 +26,10 @@ public class Multibinder : ModItem
         player.GetModPlayer<MultihealPlayer>().Multi = true;
     }
 
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        tooltips.InsertArtifactSetBonusTooltip(Type);
+    }
 }
 
 public class MultibinderItemNPCShop : GlobalNPC
@@ -53,7 +60,9 @@ public class MultihealPlayer : ModPlayer
     {
         if (Multi)
         {
-            healValue = (int)(healValue * 0.85f);
+            if (Player.TryGetModPlayer<Doctrine>(out var p) && p.doctrine && counter < 900 && HealItem is not null)
+                healValue = (int)(healValue * 1.5f);
+            else healValue = (int)(healValue * 0.85f);
         }
     }
 

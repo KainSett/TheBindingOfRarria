@@ -13,7 +13,7 @@ public class SlasherHalberd : ModItem
         Item.height = 30;
         Item.width = 26;
         Item.accessory = true;
-        Item.rare = ItemRarityID.LightRed;
+        Item.rare = ItemRarityID.Green;
         Item.value = Item.sellPrice(0, 0, 89);
     }
 
@@ -27,10 +27,10 @@ public class HalberdItemNPCShop : GlobalNPC
         if (shop.NpcType == NPCID.Merchant)
         {
             if (shop.TryGetEntry(ItemID.IronAnvil, out var entry))
-                shop.InsertAfter(entry, new Item(ModContent.ItemType<SlasherHalberd>()), Condition.Hardmode);
+                shop.InsertAfter(entry, new Item(ModContent.ItemType<SlasherHalberd>()), Condition.DownedEowOrBoc);
 
             else if (shop.TryGetEntry(ItemID.LeadAnvil, out entry))
-                shop.InsertAfter(entry, new Item(ModContent.ItemType<SlasherHalberd>()), Condition.Hardmode);
+                shop.InsertAfter(entry, new Item(ModContent.ItemType<SlasherHalberd>()), Condition.DownedEowOrBoc);
         }
     }
 }

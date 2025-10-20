@@ -1,3 +1,8 @@
+using System.Collections.Generic;
+using TheBindingOfRarria.Common.Helpers;
+using TheBindingOfRarria.Common.Systems;
+using TheBindingOfRarria.Content.ArtifactSets;
+
 namespace TheBindingOfRarria.Content.Items;
 
 public class Longclaw : ModItem
@@ -16,8 +21,25 @@ public class Longclaw : ModItem
 
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        player.GetArmorPenetration(DamageClass.Melee) += 7;
-        player.GetModPlayer<LongclawPlayer>().SlayQueen = true;
+        var p = player.GetModPlayer<LongclawPlayer>();
+        if (player.TryGetModPlayer<BeastPlayer>(out var plr) && plr.counter > 0)
+        {
+            p.pen = 14;
+            p.Scale = 0.6f;
+        }
+        else
+        {
+            p.pen = 7;
+            p.Scale = 0.3f;
+        }
+
+        player.GetArmorPenetration(DamageClass.Melee) += p.pen;
+        p.SlayQueen = true;
+    }
+
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+         tooltips.InsertArtifactSetBonusTooltip(Type);
     }
 }
 
@@ -25,13 +47,17 @@ public class LongclawPlayer : ModPlayer
 {
     public bool SlayQueen = false;
 
+    public int pen = 7;
+
+    public float Scale = 0.3f;
+
     public override void ResetEffects() => SlayQueen = false;
 
     public override void ModifyItemScale(Item item, ref float scale)
     {
         if (SlayQueen)
         {
-            scale *= 1.3f;
+            scale *= (1 + Scale);
         }
     }
 
