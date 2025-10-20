@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Terraria.Localization;
 using TheBindingOfRarria.Common.Systems;
@@ -5,23 +6,31 @@ using TheBindingOfRarria.Content.Items;
 
 namespace TheBindingOfRarria.Content.ArtifactSets;
 
-public class Instinct : ModPlayer
+public class Instinct : IArtifactSet
+{
+    public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Instinct.Name");
+
+    public Color NameColor => Color.PaleVioletRed;
+
+    public List<int> Artifacts =>
+        [ItemID.FeralClaws,
+        ItemType<BeastCrest>(),
+        ItemType<Longclaw>()];
+
+    public void Effect(int who)
+    {
+        if (Main.player[who].TryGetModPlayer<InstinctPlayer>(out var p))
+            p.instinct = true;
+    }
+}
+
+public class InstinctPlayer : ModPlayer
 {
     public bool instinct = false;
 
     public override void Load()
     {
-        ArtifactSetSystem.ArtifactSets.Add(new ArtifactSet(Language.GetOrRegister($"Mods.{Mod.Name}.ArtifactSets.{Name}.Name"),
-            Color.PaleVioletRed,
-            (plr) =>
-            {
-                if (Main.player[plr].TryGetModPlayer<Instinct>(out var p))
-                    p.instinct = true;
-            },
-        i => i == ItemID.FeralClaws || Main.recipe.Any(r => r.HasIngredient(ItemID.FeralClaws) && r.HasResult(i)),
-        i => i == ItemType<BeastCrest>() || Main.recipe.Any(r => r.HasIngredient(ItemType<BeastCrest>()) && r.HasResult(i)),
-        i => i == ItemType<Longclaw>() || Main.recipe.Any(r => r.HasIngredient(ItemType<Longclaw>()) && r.HasResult(i))
-        ));
+        ArtifactSetSystem.ArtifactSets.Add(new Instinct());
     }
 
     public override void ResetEffects()

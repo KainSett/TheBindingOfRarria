@@ -512,7 +512,7 @@ Items: {
 		DisplayName: Divergent's Fist
 		Tooltip:
 			'''
-			Your melee attacks briefly sacrifice 10% of your defense, in return for delivering a follow-up hit which deals twice the amount of defense sacrificed damage after a delay
+			Melee attacks briefly sacrifice {0} defense to deal {1} damage after a delay
 			'One step closer to hitting a Awakening'
 			'''
 	}

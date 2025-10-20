@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Terraria.Localization;
 using TheBindingOfRarria.Common.Systems;
@@ -5,23 +6,31 @@ using TheBindingOfRarria.Content.Items;
 
 namespace TheBindingOfRarria.Content.ArtifactSets;
 
-public class Doctrine : ModPlayer
+public class Doctrine : IArtifactSet
+{
+    public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Doctrine.Name");
+
+    public Color NameColor => Color.Violet;
+
+    public List<int> Artifacts =>
+        [ItemID.PhilosophersStone,
+        ItemType<Multibinder>(),
+        ItemType<InjectorBand>()];
+
+    public void Effect(int who)
+    {
+        if (Main.player[who].TryGetModPlayer<DoctrinePlayer>(out var p))
+            p.doctrine = true;
+    }
+}
+
+public class DoctrinePlayer : ModPlayer
 {
     public bool doctrine = false;
 
     public override void Load()
     {
-        ArtifactSetSystem.ArtifactSets.Add(new ArtifactSet(Language.GetOrRegister($"Mods.{Mod.Name}.ArtifactSets.{Name}.Name"),
-            Color.Violet,
-            (plr) =>
-            {
-                if (Main.player[plr].TryGetModPlayer<Doctrine>(out var p))
-                    p.doctrine = true;
-            },
-        i => i == ItemID.PhilosophersStone || Main.recipe.Any(r => r.HasIngredient(ItemID.PhilosophersStone) && r.HasResult(i)),
-        i => i == ItemType<Multibinder>() || Main.recipe.Any(r => r.HasIngredient(ItemType<Multibinder>()) && r.HasResult(i)),
-        i => i == ItemType<InjectorBand>() || Main.recipe.Any(r => r.HasIngredient(ItemType<InjectorBand>()) && r.HasResult(i))
-        ));
+        ArtifactSetSystem.ArtifactSets.Add(new Doctrine());
     }
 
     public override void ResetEffects()

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Terraria.Localization;
+using Terraria.ModLoader.Default;
 using Terraria.UI;
 using TheBindingOfRarria.Content.ArtifactSets;
 using TheBindingOfRarria.Content.Items;
@@ -12,7 +13,7 @@ namespace TheBindingOfRarria.Common.Systems;
 
 public class ArtifactSetSystem : ModSystem
 {
-    public static List<ArtifactSet> ArtifactSets = [];
+    public static List<IArtifactSet> ArtifactSets = [];
 
     public override void Unload()
     {
@@ -20,24 +21,23 @@ public class ArtifactSetSystem : ModSystem
     }
 }
 
-public class ArtifactSet(LocalizedText name, Color color, Action<int> effect, params Predicate<int>[] conditions)
+
+public interface IArtifactSet
 {
-    private readonly List<Predicate<int>> Artifacts = [.. conditions];
+    public List<int> Artifacts { get; }
 
-    public readonly LocalizedText Name = name;
+    public LocalizedText Name { get; }
 
-    public readonly Color NameColor = color;
+    public Color NameColor { get; }
 
-    private readonly Action<int> Effect = effect;
-
-    public void Update(int who, params int[] items)
+    public void Update(int who)
     {
-        if (!Main.player[who].TryGetModPlayer<ArtifactSetPlayer>(out var p))
+        if (!Main.player[who].TryGetModPlayer<ArtifactSetPlayer>(out var p) || !Main.player[who].TryGetModPlayer<ModAccessorySlotPlayer>(out var plr))
             return;
 
         foreach (var item in Artifacts)
         {
-            if (!items.Any(i => item(i)))
+            if (!plr.exAccessorySlot.Any(i => item == i.type) && !Main.player[who].armor.Any(i => i.type == item))
                 continue;
             else 
                 p.Sets[this] += 1;
@@ -45,12 +45,17 @@ public class ArtifactSet(LocalizedText name, Color color, Action<int> effect, pa
         if (p.Sets[this] < 3)
             return;
 
-        Effect.Invoke(who);
+        Effect(who);
+    }
+
+    public void Effect(int who)
+    {
+
     }
 
     public bool Contains(int type)
     {
-        return Artifacts.Any(art => art.Invoke(type));
+        return Artifacts.Any(art => art == type || Main.recipe.Any(r => r.HasIngredient(art) && r.HasResult(type)));
     }
 
     public int Count => Artifacts.Count;
@@ -58,21 +63,18 @@ public class ArtifactSet(LocalizedText name, Color color, Action<int> effect, pa
 
 public class ArtifactSetPlayer : ModPlayer
 {
-    public Dictionary<ArtifactSet, int> Sets = [];
-
-    public List<int> Artifacts = [];
+    public Dictionary<IArtifactSet, int> Sets = [];
 
     public override void PostUpdateEquips()
     {
         foreach(var set in Sets)
         {
-            set.Key.Update(Player.whoAmI, [..Artifacts]);
+            //set.Key.Update(Player.whoAmI);
         }
     }
 
     public override void PreUpdate()
     {
-        Artifacts.Clear();
         foreach (var set in Sets)
             Sets[set.Key] = 0;
     }
@@ -89,14 +91,6 @@ public class ArtifactSetPlayer : ModPlayer
 
 public class Artifact : GlobalItem
 {
-    public override void UpdateAccessory(Item item, Player player, bool hideVisual)
-    {
-        if (player.TryGetModPlayer<ArtifactSetPlayer>(out var p))
-        {
-            p.Artifacts.Add(item.type);
-        }
-    }
-
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
     {
         if (Main.LocalPlayer.TryGetModPlayer<ArtifactSetPlayer>(out var p))

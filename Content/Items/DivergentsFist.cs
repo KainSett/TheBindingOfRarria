@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using TheBindingOfRarria.Content.Projectiles;
 
@@ -32,6 +34,18 @@ public class DivergentsFist : ModItem
             .AddIngredient(ItemID.SoulofFright, 4)
             .AddTile(TileID.Anvils)
             .Register();
+    }
+
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        int index = tooltips.FindIndex(t => t.Name == "Tooltip0");
+        if (index != -1)
+        {
+            string text = string.Format(Language.GetTextValue($"Mods.TheBindingOfRarria.Items.{Name}.Tooltip"), $"{Main.LocalPlayer.statDefense / 10}", $"{(int)MathHelper.Max(1, Main.LocalPlayer.statDefense / 3)}");
+
+            text = text[..text.LastIndexOf($"\n")];
+            tooltips[index].Text = text;
+        }
     }
 }
 
@@ -67,7 +81,7 @@ public class YujiItemPlayer : ModPlayer
             if (Main.myPlayer != Player.whoAmI)
                 return;
 
-            Projectile.NewProjectile(Player.GetSource_Accessory(Fist, "Yuji fist attack"), target.Center + offset, -offset, ModContent.ProjectileType<CEFist>(), Player.statDefense / 5, 5, Player.whoAmI, target.whoAmI, offset.X, offset.Y);
+            Projectile.NewProjectile(Player.GetSource_Accessory(Fist, "Yuji fist attack"), target.Center + offset, -offset, ModContent.ProjectileType<CEFist>(), (int)MathHelper.Max(1, Player.statDefense / 5), 5, Player.whoAmI, target.whoAmI, offset.X, offset.Y);
         }
     }
 }
