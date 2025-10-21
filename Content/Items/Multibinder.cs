@@ -60,7 +60,7 @@ public class MultihealPlayer : ModPlayer
     {
         if (Multi)
         {
-            if (Player.TryGetModPlayer<Doctrine>(out var p) && p.doctrine && counter < 900 && HealItem is not null)
+            if (Player.TryGetModPlayer<DoctrinePlayer>(out var p) && p.doctrine && counter < 900 && HealItem is not null)
                 healValue = (int)(healValue * 1.5f);
             else healValue = (int)(healValue * 0.85f);
         }

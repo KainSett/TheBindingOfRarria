@@ -24,7 +24,9 @@ public class ArtifactSetSystem : ModSystem
 
 public interface IArtifactSet
 {
-    public List<int> Artifacts { get; }
+    public List<int> Items { get; }
+
+    public HashSet<Predicate<int>> Artifacts { get; set; }
 
     public LocalizedText Name { get; }
 
@@ -32,17 +34,20 @@ public interface IArtifactSet
 
     public void Update(int who)
     {
+        if (Artifacts is null || Artifacts.Count <= 0)
+            SetConditions();
+
         if (!Main.player[who].TryGetModPlayer<ArtifactSetPlayer>(out var p) || !Main.player[who].TryGetModPlayer<ModAccessorySlotPlayer>(out var plr))
             return;
 
         foreach (var item in Artifacts)
         {
-            if (!plr.exAccessorySlot.Any(i => item == i.type) && !Main.player[who].armor.Any(i => i.type == item))
+            if (!plr.exAccessorySlot.Any(i => item(i.type)) && !Main.player[who].armor.Any(i => item(i.type)))
                 continue;
             else 
-                p.Sets[this] += 1;
+                Count += 1;
         }
-        if (p.Sets[this] < 3)
+        if (Count < Artifacts.Count)
             return;
 
         Effect(who);
@@ -53,30 +58,51 @@ public interface IArtifactSet
 
     }
 
-    public bool Contains(int type)
+    public void SetConditions()
     {
-        return Artifacts.Any(art => art == type || Main.recipe.Any(r => r.HasIngredient(art) && r.HasResult(type)));
+        Artifacts = [];
+        HashSet<int> i = [];
+        var thing = 0;
+        foreach (var item in Items)
+        {
+            thing = item;
+            var tree = Array.FindAll(Main.recipe, (r => r.HasIngredient(item)));
+
+            i.Clear();
+            foreach (var it in tree)
+                i.Add(it.createItem.type);
+
+            if (tree is null || i is null || i.Count <= 0)
+            {
+                Artifacts.Add(c => c == thing);
+            }
+
+            else Artifacts.Add(c => i.Contains(c) || c == thing);
+        }
     }
 
-    public int Count => Artifacts.Count;
+    public bool Contains(int type)
+    {
+        return Artifacts.Any(art => art(type));
+    }
+
+    public int Count { get; set; }
 }
 
 public class ArtifactSetPlayer : ModPlayer
 {
-    public Dictionary<IArtifactSet, int> Sets = [];
+    public HashSet<IArtifactSet> Sets = [];
 
     public override void PostUpdateEquips()
     {
-        foreach(var set in Sets)
-        {
-            //set.Key.Update(Player.whoAmI);
-        }
+        foreach (var set in Sets)
+            set.Update(Player.whoAmI);
     }
 
     public override void PreUpdate()
     {
         foreach (var set in Sets)
-            Sets[set.Key] = 0;
+           set.Count = 0;
     }
 
     public override void Initialize()
@@ -84,7 +110,7 @@ public class ArtifactSetPlayer : ModPlayer
         Sets.Clear();
         foreach (var set in ArtifactSetSystem.ArtifactSets)
         {
-            Sets.Add(set, 0);
+            Sets.Add(set);
         }
     }
 }
@@ -96,17 +122,17 @@ public class Artifact : GlobalItem
         if (Main.LocalPlayer.TryGetModPlayer<ArtifactSetPlayer>(out var p))
         {
             foreach (var set in p.Sets)
-                if (set.Key.Contains(item.type))
+                if (set.Contains(item.type))
                 {
                     var shift = Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.Info.Closed");
-                    var name = $"[c/{set.Key.NameColor.Hex3()}:" + Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{set.Key.Name}.Name") + ']';
+                    var name = $"[c/{set.NameColor.Hex3()}:" + Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{set.Name}.Name") + ']';
                     if (Main.keyState.IsKeyDown(Keys.LeftShift) || Main.keyState.IsKeyDown(Keys.RightShift))
                     {
-                        shift = $" ({set.Value}/{set.Key.Count})";
+                        shift = $" ({set.Count}/{set.Artifacts.Count})";
 
                         var line1 = name + shift;
 
-                        var tooltip = new TooltipLine(Mod, "ArtifactSetEffect", Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{set.Key.Name}.Effect"));
+                        var tooltip = new TooltipLine(Mod, "ArtifactSetEffect", Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{set.Name}.Effect"));
                         var n = new TooltipLine(Mod, "ArtifactSet", line1);
                         tooltips.Insert(1, tooltip);
                         tooltips.Insert(1, n);

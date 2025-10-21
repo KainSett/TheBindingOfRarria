@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.Localization;
@@ -12,11 +13,14 @@ public class Android : IArtifactSet
 
     public Color NameColor => Color.LightSlateGray;
 
-    public List<int> Artifacts => 
+    public List<int> Items => 
         [ItemID.MechanicalGlove,
         ItemType<H20Volt>(),
         ItemType<RobotCarcass>()];
 
+    public HashSet<Predicate<int>> Artifacts { get; set; }
+
+    public int Count { get; set; }
     public void Effect(int who)
     {
         if (Main.player[who].TryGetModPlayer<AndroidPlayer>(out var p))

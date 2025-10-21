@@ -41,7 +41,7 @@ public class DivergentsFist : ModItem
         int index = tooltips.FindIndex(t => t.Name == "Tooltip0");
         if (index != -1)
         {
-            string text = string.Format(Language.GetTextValue($"Mods.TheBindingOfRarria.Items.{Name}.Tooltip"), $"{Main.LocalPlayer.statDefense / 10}", $"{(int)MathHelper.Max(1, Main.LocalPlayer.statDefense / 3)}");
+            string text = string.Format(Language.GetTextValue($"Mods.TheBindingOfRarria.Items.{Name}.Tooltip"), $"{Main.LocalPlayer.statDefense / 10}", $"{(int)MathHelper.Max(1, Main.LocalPlayer.statDefense / 2)}");
 
             text = text[..text.LastIndexOf($"\n")];
             tooltips[index].Text = text;
@@ -81,7 +81,7 @@ public class YujiItemPlayer : ModPlayer
             if (Main.myPlayer != Player.whoAmI)
                 return;
 
-            Projectile.NewProjectile(Player.GetSource_Accessory(Fist, "Yuji fist attack"), target.Center + offset, -offset, ModContent.ProjectileType<CEFist>(), (int)MathHelper.Max(1, Player.statDefense / 5), 5, Player.whoAmI, target.whoAmI, offset.X, offset.Y);
+            Projectile.NewProjectile(Player.GetSource_Accessory(Fist, "Yuji fist attack"), target.Center + offset, -offset, ModContent.ProjectileType<CEFist>(), (int)MathHelper.Max(1, Player.statDefense / 2), 5, Player.whoAmI, target.whoAmI, offset.X, offset.Y);
         }
     }
 }

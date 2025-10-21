@@ -11,14 +11,14 @@ public static partial class Helper
 {
     public static void InsertArtifactSetBonusTooltip(this List<TooltipLine> tooltips, int type)
     {
-        if (!Main.LocalPlayer.TryGetModPlayer<ArtifactSetPlayer>(out var p) || !p.Sets.Any(l => l.Key.Contains(type)))
+        if (!Main.LocalPlayer.TryGetModPlayer<ArtifactSetPlayer>(out var p) || !p.Sets.Any(l => l.Contains(type)))
             return;
 
         string name = "";
         foreach (var set in p.Sets)
         {
-            if (set.Key.Contains(type) && set.Value >= set.Key.Count)
-                name = set.Key.Name.Value;
+            if (set.Contains(type) && set.Count >= set.Artifacts.Count)
+                name = set.Name.Value;
         }
 
         if (name == "")
@@ -27,7 +27,7 @@ public static partial class Helper
         var text = Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{name}.Additional");
         var line = new TooltipLine("TheBindingOfRarria/ArtifactSetBonus", text)
         {
-            OverrideColor = p.Sets.FirstOrDefault(s => s.Key.Contains(type)).Key.NameColor
+            OverrideColor = p.Sets.FirstOrDefault(s => s.Contains(type)).NameColor
         };
 
 

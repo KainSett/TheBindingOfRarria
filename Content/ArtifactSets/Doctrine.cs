@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.Localization;
@@ -12,11 +13,14 @@ public class Doctrine : IArtifactSet
 
     public Color NameColor => Color.Violet;
 
-    public List<int> Artifacts =>
+    public List<int> Items =>
         [ItemID.PhilosophersStone,
         ItemType<Multibinder>(),
         ItemType<InjectorBand>()];
 
+    public HashSet<Predicate<int>> Artifacts { get; set; }
+
+    public int Count { get; set; }
     public void Effect(int who)
     {
         if (Main.player[who].TryGetModPlayer<DoctrinePlayer>(out var p))

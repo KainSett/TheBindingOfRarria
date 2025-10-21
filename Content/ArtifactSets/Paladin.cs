@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.Localization;
@@ -8,14 +9,18 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Paladin : IArtifactSet
 {
+    public List<int> Items => [
+        ItemID.PaladinsShield,
+        ItemID.CrossNecklace,
+        ItemType<CursedChain>()];
+
     public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Paladin.Name");
 
     public Color NameColor => Color.PaleGoldenrod;
 
-    public List<int> Artifacts => 
-        [ItemID.PaladinsShield,
-        ItemID.CrossNecklace,
-        ItemType<CursedChain>()];
+    public HashSet<Predicate<int>> Artifacts { get; set; }
+
+    public int Count { get; set; }
 
     public void Effect(int who)
     {

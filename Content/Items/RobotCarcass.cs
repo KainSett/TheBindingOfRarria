@@ -95,8 +95,8 @@ public class RobotConversionPlayer : ModPlayer
     public override void UpdateBadLifeRegen()
     {
         if (Robot)
-            Player.lifeRegen -= counter / (Player.GetModPlayer<Android>().android ? 2 : 1);
+            Player.lifeRegen -= counter / (Player.GetModPlayer<AndroidPlayer>().android ? 2 : 1);
 
-        Player.GetModPlayer<Android>().android = false;
+        Player.GetModPlayer<AndroidPlayer>().android = false;
     }
 }
