@@ -61,12 +61,11 @@ public interface IArtifactSet
     public void SetConditions()
     {
         Artifacts = [];
-        List<int> i = [];
         foreach (var item in Items)
         {
             var tree = Array.FindAll(Main.recipe, (r => r.HasIngredient(item)));
 
-            i.Clear();
+            List<int> i = [];
             foreach (var it in tree)
                 i.Add(it.createItem.type);
 
