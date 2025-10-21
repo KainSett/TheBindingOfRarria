@@ -18,7 +18,7 @@ public class Instinct : IArtifactSet
         ItemType<BeastCrest>(),
         ItemType<Longclaw>()];
 
-    public HashSet<Predicate<int>> Artifacts { get; set; }
+    public List<Predicate<int>> Artifacts { get; set; }
 
     public int Count { get; set; }
 

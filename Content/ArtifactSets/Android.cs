@@ -18,7 +18,7 @@ public class Android : IArtifactSet
         ItemType<H20Volt>(),
         ItemType<RobotCarcass>()];
 
-    public HashSet<Predicate<int>> Artifacts { get; set; }
+    public List<Predicate<int>> Artifacts { get; set; }
 
     public int Count { get; set; }
     public void Effect(int who)

@@ -18,7 +18,7 @@ public class Paladin : IArtifactSet
 
     public Color NameColor => Color.PaleGoldenrod;
 
-    public HashSet<Predicate<int>> Artifacts { get; set; }
+    public List<Predicate<int>> Artifacts { get; set; }
 
     public int Count { get; set; }
 

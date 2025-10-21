@@ -26,7 +26,7 @@ public interface IArtifactSet
 {
     public List<int> Items { get; }
 
-    public HashSet<Predicate<int>> Artifacts { get; set; }
+    public List<Predicate<int>> Artifacts { get; set; }
 
     public LocalizedText Name { get; }
 
@@ -61,11 +61,9 @@ public interface IArtifactSet
     public void SetConditions()
     {
         Artifacts = [];
-        HashSet<int> i = [];
-        var thing = 0;
+        List<int> i = [];
         foreach (var item in Items)
         {
-            thing = item;
             var tree = Array.FindAll(Main.recipe, (r => r.HasIngredient(item)));
 
             i.Clear();
@@ -74,10 +72,10 @@ public interface IArtifactSet
 
             if (tree is null || i is null || i.Count <= 0)
             {
-                Artifacts.Add(c => c == thing);
+                Artifacts.Add(c => c == item);
             }
 
-            else Artifacts.Add(c => i.Contains(c) || c == thing);
+            else Artifacts.Add(c => i.Contains(c) || c == item);
         }
     }
 
