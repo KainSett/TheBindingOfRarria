@@ -148,16 +148,22 @@ public class Artifact : GlobalItem
                     var name = $"[c/{set.NameColor.Hex3()}:" + Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{set.Name}.Name") + ']';
                     if (Main.keyState.IsKeyDown(Keys.LeftShift) || Main.keyState.IsKeyDown(Keys.RightShift))
                     {
-                        shift = $" ({set.Count}/{set.Artifacts.Count})";
+                        shift = $" ({set.Count}/{set.Artifacts.Count}" + Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.Info.Equipped") + ")";
 
                         var line1 = name + shift;
 
                         var tooltip = new TooltipLine(Mod, "ArtifactSetEffect", Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{set.Name}.Effect"));
+                        tooltip.OverrideColor = set.Count >= set.Artifacts.Count ? Color.White : Color.Gray;
+
                         var n = new TooltipLine(Mod, "ArtifactSet", line1);
+
                         tooltips.Insert(1, tooltip);
                         tooltips.Insert(1, n);
                         for (int i = 3; i < tooltips.Count; i++)
                             tooltips[i].Hide();
+
+                        tooltip = new TooltipLine(Mod, "ArtifactSetInfoConsists", /*"\n" + */Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.Info.Consists"));
+                        tooltips.Add(tooltip);
 
                         var names = set.AccessoryNames;
                         foreach (var na in names)
@@ -167,12 +173,6 @@ public class Artifact : GlobalItem
                             Item vanilla = null;
                             if (!set.CheckEquipped(Main.myPlayer, set.Artifacts[names.IndexOf(na)], out modded, out vanilla))
                                 nam.OverrideColor = Color.Gray;
-                            else nam.OverrideColor = set.NameColor;
-
-                            nam.OverrideColor *= 1.2f;
-                            var c = nam.OverrideColor.Value;
-                            nam.OverrideColor = new Color(c.R, c.G, c.B, 255);
-
                                 //if (modded is null && vanilla is null)
 
                                 tooltips.Add(nam);

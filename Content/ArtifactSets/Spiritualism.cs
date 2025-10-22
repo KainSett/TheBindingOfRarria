@@ -15,7 +15,7 @@ public class Spiritualism : IArtifactSet
 
     public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Spiritualism.Name");
 
-    public Color NameColor => Color.Violet;
+    public Color NameColor => new Color(130, 202, 255, 255);
 
     public List<Predicate<int>> Artifacts { get; set; }
 

@@ -5,6 +5,7 @@ using TheBindingOfRarria.Content.Buffs;
 using System.Collections.Generic;
 using Terraria.Localization;
 using TheBindingOfRarria.Content.ArtifactSets;
+using TheBindingOfRarria.Common.Helpers;
 
 namespace TheBindingOfRarria.Content.Items;
 
@@ -52,6 +53,8 @@ public class BoundlessSpirit : ModItem
             text = text[(text.LastIndexOf($"\n") + 1)..];
             tooltips[index].Text = text;
         }
+
+        tooltips.InsertArtifactSetBonusTooltip(Type);
     }
 }
 

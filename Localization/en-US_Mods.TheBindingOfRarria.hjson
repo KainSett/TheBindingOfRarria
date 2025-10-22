@@ -1145,7 +1145,7 @@ Items: {
 		DisplayName: Longclaw
 		Tooltip:
 			'''
-			+7 melee armor penetration
+			+6 melee armor penetration
 			Increases melee size by 30% 
 			'Claws of a beast unknown to science'
 			'''
@@ -1532,7 +1532,11 @@ NPCs: {
 }
 
 ArtifactSets: {
-	Info.Closed: " (press shift for info)"
+	Info: {
+		Closed: " (press shift for info)"
+		Consists: This set consists of:
+		Equipped: " equipped"
+	}
 
 	Paladin: {
 		Name: Paladin
@@ -1553,7 +1557,7 @@ ArtifactSets: {
 
 	Cryonics: {
 		Name: Cryonics
-		Effect: Frozen Turtle Shell's effect is also active while underwater
+		Effect: Frozen Turtle Shell's effect isf also active while underwater
 		Additional: Also activates Frozen Shell's effect
 	}
 
