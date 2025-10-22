@@ -1533,9 +1533,9 @@ NPCs: {
 
 ArtifactSets: {
 	Info: {
-		Closed: " (press shift for info)"
+		Closed: " Set] (hold shift for info)"
 		Consists: This set consists of:
-		Equipped: " equipped"
+		Equipped: " Set] ({0}/{1} equipped)"
 	}
 
 	Paladin: {

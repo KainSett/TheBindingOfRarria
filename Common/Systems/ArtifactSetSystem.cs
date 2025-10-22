@@ -145,10 +145,10 @@ public class Artifact : GlobalItem
                 if (set.Contains(item.type))
                 {
                     var shift = Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.Info.Closed");
-                    var name = $"[c/{set.NameColor.Hex3()}:" + Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{set.Name}.Name") + ']';
+                    var name = $"[c/{set.NameColor.Hex3()}:" + Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{set.Name}.Name");
                     if (Main.keyState.IsKeyDown(Keys.LeftShift) || Main.keyState.IsKeyDown(Keys.RightShift))
                     {
-                        shift = $" ({set.Count}/{set.Artifacts.Count}" + Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.Info.Equipped") + ")";
+                        shift = string.Format(Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.Info.Equipped"), set.Count, set.Artifacts.Count);
 
                         var line1 = name + shift;
 
@@ -157,9 +157,11 @@ public class Artifact : GlobalItem
 
                         var n = new TooltipLine(Mod, "ArtifactSet", line1);
 
-                        tooltips.Insert(1, tooltip);
-                        tooltips.Insert(1, n);
-                        for (int i = 3; i < tooltips.Count; i++)
+                        var index = tooltips.LastIndexOf(tooltips.LastOrDefault(t => t.Name.Contains("Artifact")));
+
+                        tooltips.Insert(index == -1 ? 1 : index + 1, tooltip);
+                        tooltips.Insert(index == -1 ? 1 : index + 1, n);
+                        for (int i = (index == -1 ? 0 : index) + 3; i < tooltips.Count; i++)
                             tooltips[i].Hide();
 
                         tooltip = new TooltipLine(Mod, "ArtifactSetInfoConsists", /*"\n" + */Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.Info.Consists"));
@@ -173,12 +175,11 @@ public class Artifact : GlobalItem
                             Item vanilla = null;
                             if (!set.CheckEquipped(Main.myPlayer, set.Artifacts[names.IndexOf(na)], out modded, out vanilla))
                                 nam.OverrideColor = Color.Gray;
-                                //if (modded is null && vanilla is null)
 
                                 tooltips.Add(nam);
                         }
 
-                        return;
+                        continue;
                     }
                     var text = name + shift;
 
