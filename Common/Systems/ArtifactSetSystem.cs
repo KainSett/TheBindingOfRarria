@@ -42,10 +42,17 @@ public interface IArtifactSet
 
         foreach (var item in Artifacts)
         {
-            if (!plr.exAccessorySlot.Any(i => item(i.type)) && !Main.player[who].armor.Any(i => item(i.type)))
+            if (!CheckEquipped(who, item, out var modded, out var vanilla))
                 continue;
-            else 
+            else
+            {
+                if (modded is not null)
+                    AccessoryNames[Artifacts.IndexOf(item)] = modded.Name;
+
+                else AccessoryNames[Artifacts.IndexOf(item)] = vanilla.Name;
+
                 Count += 1;
+            }
         }
         if (Count < Artifacts.Count)
             return;
@@ -61,6 +68,7 @@ public interface IArtifactSet
     public void SetConditions()
     {
         Artifacts = [];
+        AccessoryNames = [];
         foreach (var item in Items)
         {
             var tree = Array.FindAll(Main.recipe, (r => r.HasIngredient(item)));
@@ -74,7 +82,12 @@ public interface IArtifactSet
                 Artifacts.Add(c => c == item);
             }
 
-            else Artifacts.Add(c => i.Contains(c) || c == item);
+            else
+            {
+                Artifacts.Add(c => i.Contains(c) || c == item);
+            }
+
+            AccessoryNames.Add(new Item(item).Name);
         }
     }
 
@@ -82,6 +95,16 @@ public interface IArtifactSet
     {
         return Artifacts.Any(art => art(type));
     }
+
+    public bool CheckEquipped(int who, Predicate<int> predicate, out Item modded, out Item vanilla)
+    {
+        modded = Main.player[who].GetModPlayer<ModAccessorySlotPlayer>().exAccessorySlot.FirstOrDefault(i => predicate(i.type));
+        vanilla = Main.player[who].armor.FirstOrDefault(i => predicate(i.type));
+
+        return modded != null || vanilla != null;
+    }
+
+    public List<string> AccessoryNames { get; set; }
 
     public int Count { get; set; }
 }
@@ -135,6 +158,26 @@ public class Artifact : GlobalItem
                         tooltips.Insert(1, n);
                         for (int i = 3; i < tooltips.Count; i++)
                             tooltips[i].Hide();
+
+                        var names = set.AccessoryNames;
+                        foreach (var na in names)
+                        {
+                            var nam = new TooltipLine(Mod, "ArtifactNames", na);
+                            Item modded = null;
+                            Item vanilla = null;
+                            if (!set.CheckEquipped(Main.myPlayer, set.Artifacts[names.IndexOf(na)], out modded, out vanilla))
+                                nam.OverrideColor = Color.Gray;
+                            else nam.OverrideColor = set.NameColor;
+
+                            nam.OverrideColor *= 1.2f;
+                            var c = nam.OverrideColor.Value;
+                            nam.OverrideColor = new Color(c.R, c.G, c.B, 255);
+
+                                //if (modded is null && vanilla is null)
+
+                                tooltips.Add(nam);
+                        }
+
                         return;
                     }
                     var text = name + shift;

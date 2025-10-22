@@ -22,6 +22,8 @@ public class Paladin : IArtifactSet
 
     public int Count { get; set; }
 
+    public List<string> AccessoryNames { get; set; }
+
     public void Effect(int who)
     {
         if (Main.player[who].TryGetModPlayer<PaladinPlayer>(out var p))

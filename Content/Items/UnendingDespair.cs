@@ -22,15 +22,15 @@ public class UnendingDespair : ModItem
         Item.expert = true;
     }
 
-    private int counter = 0;
 
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        player.GetModPlayer<LifeSuckerPlayer>().Sucker = true;
+        var p = player.GetModPlayer<LifeSuckerPlayer>();
+        p.Sucker = true;
 
-        counter++;
+        p.counter++;
 
-        if (counter >= 300)
+        if (p.counter >= 300)
         {
                 // Make this use either an array or hashset please.
                 // No, ms. List<T> hater.
@@ -52,7 +52,7 @@ public class UnendingDespair : ModItem
                 }
                 if (victims.Count == i + 1 && victims[i] != -1)
                 {
-                    counter = 0;
+                    p.counter = 0;
                     Projectile.NewProjectile(player.GetSource_Accessory(Item, "Unending Despair sucking"), Main.npc[victims[i]].Center, Main.npc[victims[i]].Center - player.Center, ModContent.ProjectileType<LifeSucker>(), player.statLifeMax2 / 10, 0, player.whoAmI, victims[i]);
                 }
             }
@@ -88,6 +88,8 @@ public class DespairLootNPC : GlobalNPC
 // It's so that I could have every lifesucker proj pool off their heal here in one place.
 public class LifeSuckerPlayer : ModPlayer
 {
+    public int counter = 0;
+
     public int heal = 0;
 
     public bool Sucker = false;

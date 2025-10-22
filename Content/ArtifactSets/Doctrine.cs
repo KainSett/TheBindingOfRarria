@@ -21,6 +21,9 @@ public class Doctrine : IArtifactSet
     public List<Predicate<int>> Artifacts { get; set; }
 
     public int Count { get; set; }
+
+    public List<string> AccessoryNames { get; set; }
+
     public void Effect(int who)
     {
         if (Main.player[who].TryGetModPlayer<DoctrinePlayer>(out var p))

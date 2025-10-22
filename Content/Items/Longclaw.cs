@@ -14,7 +14,7 @@ public class Longclaw : ModItem
         Item.accessory = true;
         Item.height = 32;
         Item.width = 34;
-        Item.value = Item.sellPrice(0, 8);
+        Item.value = Item.sellPrice(0, 6);
         Item.rare = ItemRarityID.Expert;
         Item.expert = true;
     }
@@ -24,12 +24,12 @@ public class Longclaw : ModItem
         var p = player.GetModPlayer<LongclawPlayer>();
         if (player.TryGetModPlayer<BeastPlayer>(out var plr) && plr.counter > 0)
         {
-            p.pen = 14;
+            p.pen = 12;
             p.Scale = 0.6f;
         }
         else
         {
-            p.pen = 7;
+            p.pen = 6;
             p.Scale = 0.3f;
         }
 
@@ -47,7 +47,7 @@ public class LongclawPlayer : ModPlayer
 {
     public bool SlayQueen = false;
 
-    public int pen = 7;
+    public int pen = 6;
 
     public float Scale = 0.3f;
 
@@ -69,7 +69,7 @@ public class LongclawItemNPCShop : GlobalNPC
     {
         if (shop.NpcType == NPCID.BestiaryGirl)
         {
-            shop.Add(new Item(ModContent.ItemType<Longclaw>()), Condition.InExpertMode, Condition.DownedPlantera);
+            shop.Add(new Item(ModContent.ItemType<Longclaw>()), Condition.InExpertMode, Condition.DownedMechBossAny);
         }
     }
 }

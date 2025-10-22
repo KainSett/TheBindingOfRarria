@@ -1553,7 +1553,7 @@ ArtifactSets: {
 
 	Cryonics: {
 		Name: Cryonics
-		Effect: Frozen Shell's effect is also active while Ice Bag's effect is active
+		Effect: Frozen Turtle Shell's effect is also active while underwater
 		Additional: Also activates Frozen Shell's effect
 	}
 

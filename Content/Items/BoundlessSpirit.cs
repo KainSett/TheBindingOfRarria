@@ -4,6 +4,7 @@ using Terraria;
 using TheBindingOfRarria.Content.Buffs;
 using System.Collections.Generic;
 using Terraria.Localization;
+using TheBindingOfRarria.Content.ArtifactSets;
 
 namespace TheBindingOfRarria.Content.Items;
 
@@ -73,6 +74,12 @@ public class BoundlessSpiritPlayer : ModPlayer
 
             Player.Heal(Player.statManaMax2 / 10);
             Player.AddBuff(ModContent.BuffType<SpiritRush>(), 240);
+
+            if (Player.TryGetModPlayer<SpiritualismPlayer>(out var p) && p.spiritualism) 
+            {
+                p.spiritualism = false;
+                Player.GetModPlayer<LifeSuckerPlayer>().counter = 300; 
+            }
         }
 
         if (Player.statMana >= Player.statManaMax2) 
