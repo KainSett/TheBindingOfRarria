@@ -25,6 +25,7 @@ public class Mardroeme : ModItem
         Item.value = Item.sellPrice(gold: 1);
         Item.rare = ItemRarityID.Green;
         Item.UseSound = SoundID.Item2;
+        Item.potionDelay = 3600;
         Item.healLife = 230;
         Item.potion = true;
     }
@@ -40,8 +41,8 @@ public class Mardroeme : ModItem
     {
         player.Hurt(PlayerDeathReason.ByCustomReason(NetworkText.FromLiteral($"{player.name} sacrificed their vitality.")), 50, 0, false, false, 0, false, 999);
         player.GetModPlayer<MardroemePlayer>().counter = 300;
-        player.AddBuff(BuffID.PotionSickness, 3000);
-        player.GetHealLife(Item);
+        player.ApplyPotionDelay(Item);
+        //player.GetHealLife(Item);
 
         return true;
     }

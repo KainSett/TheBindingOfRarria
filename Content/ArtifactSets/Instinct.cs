@@ -9,7 +9,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Instinct : IArtifactSet
 {
-    public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Instinct.Name");
+    public string Name => "Instinct";
 
     public Color NameColor => Color.PaleVioletRed;
 

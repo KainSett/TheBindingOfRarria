@@ -9,7 +9,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Android : IArtifactSet
 {
-    public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Android.Name");
+    public string Name => "Android";
 
     public Color NameColor => Color.LightSlateGray;
 

@@ -13,7 +13,7 @@ public class Spiritualism : IArtifactSet
         ItemType<BoundlessSpirit>(),
         ItemType<PhantomPopper>()];
 
-    public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Spiritualism.Name");
+    public string Name => "Spiritualism";
 
     public Color NameColor => new Color(130, 202, 255, 255);
 

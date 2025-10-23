@@ -9,7 +9,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Doctrine : IArtifactSet
 {
-    public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Doctrine.Name");
+    public string Name => "Doctrine";
 
     public Color NameColor => Color.Violet;
 

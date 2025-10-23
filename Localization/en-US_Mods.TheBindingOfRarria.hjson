@@ -685,7 +685,7 @@ Items: {
 		Tooltip:
 			'''
 			Grants tremendously increased life regeneration [c/90ee90:(5 hp/s)]
-			Your life cannot exceed {0} [c/90ee90:(66% of your max life)], and attacks against you have 10% increased damage
+			Your life cannot exceed {0} [c/90ee90:({1}% of your max life)], and attacks against you have 10% increased damage
 			'The prized, oaky flavor of Sangreal is a noble privilege. Can you handle it?'
 			'''
 		DeathMessage: "{0} couldn't handle the power of noble alcohol"
@@ -1327,6 +1327,15 @@ Items: {
 			'Wasn't it supposed to be a ring?'
 			'''
 	}
+
+	HeartAmulet: {
+		DisplayName: Heart Amulet
+		Tooltip:
+			'''
+			All healing recieved is 20% more effective
+			'Survival is paramount'
+			'''
+	}
 }
 
 Buffs: {
@@ -1573,8 +1582,26 @@ ArtifactSets: {
 		Additional: Activation also resets Unending Despair's cooldown
 	}
 
-	Genocide: {
-		Name: Genocide
+	Execution: {
+		Name: Execution
 		Effect: First hit against an enemy has an 8% chance to instakill it
+	}
+
+	HealingFactor: {
+		Name: Healing Factor
+		Effect: Heart Amulet's effect also applies to life regeneration
+		Additional: Also applies to life regeneration
+	}
+
+	Monarch: {
+		Name: Monarch
+		Effect: Sangreal's limit is 90% of max life instead
+		Additional: The limit is 90% of max life instead
+	}
+
+	NaturesBlessing: {
+		Name: Nature's Blessing
+		Effect: Natural life regeneration cannot be reduced while under Doran's Shield's effect
+		Additional: Natural life regeneration cannot be reduced while under this effect
 	}
 }

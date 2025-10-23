@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using TheBindingOfRarria.Common.Helpers;
 using TheBindingOfRarria.Content.Buffs;
 
 namespace TheBindingOfRarria.Content.Items;
@@ -20,6 +23,11 @@ public class DoransShield : ModItem
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<TankStartPlayer>().AgainstAnADC = true;
+
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        tooltips.InsertArtifactSetBonusTooltip(Type);
+    }
 }
 
 public class TankStartPlayer : ModPlayer

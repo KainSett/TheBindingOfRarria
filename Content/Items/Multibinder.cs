@@ -51,6 +51,8 @@ public class MultihealPlayer : ModPlayer
 
     public Item HealItem = null;
 
+    public bool ShouldUpgrade = false;
+
     public override void ResetEffects()
     {
         Multi = false;
@@ -60,9 +62,11 @@ public class MultihealPlayer : ModPlayer
     {
         if (Multi)
         {
-            if (Player.TryGetModPlayer<DoctrinePlayer>(out var p) && p.doctrine && counter < 900 && HealItem is not null)
+            if (Player.TryGetModPlayer<DoctrinePlayer>(out var p) && p.doctrine && counter < 900 && HealItem is not null && ShouldUpgrade)
                 healValue = (int)(healValue * 1.5f);
             else healValue = (int)(healValue * 0.85f);
+
+            ShouldUpgrade = false;
         }
     }
 
@@ -89,6 +93,8 @@ public class MultihealPlayer : ModPlayer
 
         if (counter <= 0 && HealItem != null)
         {
+            ShouldUpgrade = true;
+
             // stolen from QuickHeal()
             SoundEngine.PlaySound(HealItem.UseSound, Player.position);
             ItemLoader.UseItem(HealItem, Player);

@@ -14,9 +14,9 @@ public class Paladin : IArtifactSet
         ItemID.CrossNecklace,
         ItemType<CursedChain>()];
 
-    public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Paladin.Name");
+    public string Name => "Paladin";
 
-    public Color NameColor => Color.PaleGoldenrod;
+    public Color NameColor => Color.Khaki;
 
     public List<Predicate<int>> Artifacts { get; set; }
 

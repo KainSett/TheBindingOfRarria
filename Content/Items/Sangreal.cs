@@ -1,16 +1,18 @@
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
-using Terraria.GameInput;
-using Terraria.Localization;
+using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.GameInput;
+using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using TheBindingOfRarria.Common.Config;
+using TheBindingOfRarria.Common.Helpers;
+using TheBindingOfRarria.Content.ArtifactSets;
 using TheBindingOfRarria.Content.Buffs;
-using System.Linq;
-using Terraria.ID;
-using Terraria.DataStructures;
-using System;
-using Terraria.GameContent.ItemDropRules;
 
 namespace TheBindingOfRarria.Content.Items;
 
@@ -36,8 +38,9 @@ public class Sangreal : ModItem
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
         var value = Main.LocalPlayer.GetModPlayer<SangrealPlayer>().Limit;
+        var limit = Main.LocalPlayer.GetModPlayer<SangrealPlayer>().percent;
 
-        string text = string.Format(Language.GetTextValue($"Mods.TheBindingOfRarria.Items.{Name}.Tooltip"), $"{value}");
+        string text = string.Format(Language.GetTextValue($"Mods.TheBindingOfRarria.Items.{Name}.Tooltip"), $"{value}", $"{(int)(limit * 100)}");
 
         int index = tooltips.FindIndex(line => line.Name == "Tooltip1");
         if (index != -1)
@@ -46,6 +49,8 @@ public class Sangreal : ModItem
             text = text[(text.LastIndexOf($"\n") + 1)..];
             tooltips[index].Text = text;
         }
+
+        tooltips.InsertArtifactSetBonusTooltip(Type);
     }
 }
 
@@ -54,6 +59,8 @@ public class SangrealPlayer : ModPlayer
     public bool Noble = false;
 
     public int Limit = 500;
+
+    public float percent = 0.66f;
 
     public override void Load()
     {
@@ -64,7 +71,14 @@ public class SangrealPlayer : ModPlayer
 
     public override void PostUpdate()
     {
-        Limit = (int)(Player.statLifeMax2 * 0.66f);
+        if (Player.TryGetModPlayer<MonarchPlayer>(out var p) && p.monarch)
+        {
+            percent = 0.9f;
+            p.monarch = false;
+        }
+        else percent = 0.66f;
+
+        Limit = (int)(Player.statLifeMax2 * percent);
     }
 
     private static void On_Player_HealEffect(On_Player.orig_HealEffect orig, Player self, int healAmount, bool broadcast)

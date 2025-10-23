@@ -13,7 +13,7 @@ public class Cryonics : IArtifactSet
         ItemID.ArcticDivingGear,
         ItemType<MedicalIceBag>()];
 
-    public LocalizedText Name => Language.GetOrRegister($"Mods.TheBindingOfRarria.ArtifactSets.Cryonics.Name");
+    public string Name => "Cryonics";
 
     public Color NameColor => Color.SkyBlue;
 

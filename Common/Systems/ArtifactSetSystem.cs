@@ -28,7 +28,7 @@ public interface IArtifactSet
 
     public List<Predicate<int>> Artifacts { get; set; }
 
-    public LocalizedText Name { get; }
+    public string Name { get; }
 
     public Color NameColor { get; }
 
@@ -42,14 +42,11 @@ public interface IArtifactSet
 
         foreach (var item in Artifacts)
         {
-            if (!CheckEquipped(who, item, out var modded, out var vanilla))
+            if (!CheckEquipped(who, item, out var Item))
                 continue;
             else
             {
-                if (modded is not null)
-                    AccessoryNames[Artifacts.IndexOf(item)] = modded.Name;
-
-                else AccessoryNames[Artifacts.IndexOf(item)] = vanilla.Name;
+                AccessoryNames[Artifacts.IndexOf(item)] = Item.Name;
 
                 Count += 1;
             }
@@ -96,12 +93,15 @@ public interface IArtifactSet
         return Artifacts.Any(art => art(type));
     }
 
-    public bool CheckEquipped(int who, Predicate<int> predicate, out Item modded, out Item vanilla)
+    public bool CheckEquipped(int who, Predicate<int> predicate, out Item item)
     {
-        modded = Main.player[who].GetModPlayer<ModAccessorySlotPlayer>().exAccessorySlot.FirstOrDefault(i => predicate(i.type));
-        vanilla = Main.player[who].armor.FirstOrDefault(i => predicate(i.type));
+        var p = Main.player[who].GetModPlayer<ArtifactSetPlayer>();
 
-        return modded != null || vanilla != null;
+        var modded = Main.player[who].GetModPlayer<ModAccessorySlotPlayer>().exAccessorySlot.FirstOrDefault(i => predicate(i.type));
+        var vanilla = Main.player[who].armor.FirstOrDefault(i => predicate(i.type));
+        item = vanilla is null ? modded : vanilla;
+
+        return p.Equipped.Any(i => predicate(i));
     }
 
     public List<string> AccessoryNames { get; set; }
@@ -113,6 +113,8 @@ public class ArtifactSetPlayer : ModPlayer
 {
     public HashSet<IArtifactSet> Sets = [];
 
+    public List<int> Equipped = [];
+
     public override void PostUpdateEquips()
     {
         foreach (var set in Sets)
@@ -123,6 +125,8 @@ public class ArtifactSetPlayer : ModPlayer
     {
         foreach (var set in Sets)
            set.Count = 0;
+
+        Equipped.Clear();
     }
 
     public override void Initialize()
@@ -137,9 +141,14 @@ public class ArtifactSetPlayer : ModPlayer
 
 public class Artifact : GlobalItem
 {
+    public override void UpdateAccessory(Item item, Player player, bool hideVisual)
+    {
+        player.GetModPlayer<ArtifactSetPlayer>().Equipped.Add(item.type);
+    }
+
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
     {
-        if (Main.LocalPlayer.TryGetModPlayer<ArtifactSetPlayer>(out var p))
+        if (!tooltips.Any(t => t.Name.Contains("Social")) && Main.LocalPlayer.TryGetModPlayer<ArtifactSetPlayer>(out var p))
         {
             foreach (var set in p.Sets)
                 if (set.Contains(item.type))
@@ -157,7 +166,7 @@ public class Artifact : GlobalItem
 
                         var n = new TooltipLine(Mod, "ArtifactSet", line1);
 
-                        var index = tooltips.LastIndexOf(tooltips.LastOrDefault(t => t.Name.Contains("Artifact")));
+                        var index = tooltips.LastIndexOf(tooltips.LastOrDefault(t => t.Name != "ArtifactSetBonus" && t.Name.Contains("Artifact")));
 
                         tooltips.Insert(index == -1 ? 1 : index + 1, tooltip);
                         tooltips.Insert(index == -1 ? 1 : index + 1, n);
@@ -171,9 +180,7 @@ public class Artifact : GlobalItem
                         foreach (var na in names)
                         {
                             var nam = new TooltipLine(Mod, "ArtifactNames", na);
-                            Item modded = null;
-                            Item vanilla = null;
-                            if (!set.CheckEquipped(Main.myPlayer, set.Artifacts[names.IndexOf(na)], out modded, out vanilla))
+                            if (!set.CheckEquipped(Main.myPlayer, set.Artifacts[names.IndexOf(na)], out var Item))
                                 nam.OverrideColor = Color.Gray;
 
                                 tooltips.Add(nam);

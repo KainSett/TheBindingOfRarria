@@ -18,14 +18,14 @@ public static partial class Helper
         foreach (var set in p.Sets)
         {
             if (set.Contains(type) && set.Count >= set.Artifacts.Count)
-                name = set.Name.Value;
+                name = set.Name;
         }
 
         if (name == "")
             return;
 
         var text = Language.GetTextValue($"Mods.TheBindingOfRarria.ArtifactSets.{name}.Additional");
-        var line = new TooltipLine("TheBindingOfRarria/ArtifactSetBonus", text)
+        var line = new TooltipLine("TheBindingOfRarria", "ArtifactSetBonus", text)
         {
             OverrideColor = p.Sets.FirstOrDefault(s => s.Contains(type)).NameColor
         };
