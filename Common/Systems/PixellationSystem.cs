@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Terraria;
 using Terraria.ModLoader;
 using TheBindingOfRarria.Common.Helpers;
@@ -15,7 +16,8 @@ public class PixellationSystem : ModSystem
     public enum RenderType
     {
         Additive,
-        AlphaBlend
+        AlphaBlend,
+        Subtractive //har har har black
     }
 
     public enum RenderLayer
@@ -26,17 +28,20 @@ public class PixellationSystem : ModSystem
 
     private static RenderTarget2D Target { get; set; }
 
-    private static Dictionary<RenderLayer, Queue<(Action action, RenderType type)>> Actions { get; set; } = [];
+    private static Dictionary<RenderLayer, Queue<(Action, RenderType)>> Actions { get; set; } = [];
 
     public override void Load()
     {
-
         if (!Main.dedServ)
         {
             Main.OnResolutionChanged += InitializeRT;
             Main.RunOnMainThread(() =>
             {
-                Target = new(Main.instance.GraphicsDevice, Main.screenWidth / 2, Main.screenHeight / 2, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+                Target = new(Main.instance.GraphicsDevice,
+                    Main.screenWidth / 2, Main.screenHeight / 2,
+                    false, SurfaceFormat.Color, DepthFormat.None, 0,
+                    RenderTargetUsage.PreserveContents
+                );
             });
         }
 
@@ -72,11 +77,11 @@ public class PixellationSystem : ModSystem
 
     public static void QueuePixellationAction(Action action, RenderType type, RenderLayer layer)
     {
-        if (!Actions.TryGetValue(layer, out Queue<(Action action, RenderType type)> value))
+        if (!Actions.TryGetValue(layer, out Queue<(Action, RenderType)> value))
         {
             var nullQueue = new Queue<(Action, RenderType)>();
             value = nullQueue;
-            Actions.Add(layer, value); 
+            Actions.Add(layer, value);
         }
 
         value.Enqueue((action, type));
@@ -85,7 +90,6 @@ public class PixellationSystem : ModSystem
     /// <summary>
     /// Invokes the passed draw action on the rt and draws the rt with 2x scale
     /// </summary>
-    /// 
     private static void DrawPixellated(RenderLayer layer)
     {
         if (Actions is null || Actions.Count <= 0 || !Actions.TryGetValue(layer, out Queue<(Action action, RenderType type)> value) || value is null || value.Count <= 0)
@@ -94,9 +98,13 @@ public class PixellationSystem : ModSystem
         var gd = Main.graphics.GraphicsDevice;
 
         if (gd.PresentationParameters.RenderTargetUsage != RenderTargetUsage.PreserveContents)
+        {
+            Main.NewText("oppa gangnam style");
             gd.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+        }
 
         var oldTargets = gd.GetRenderTargets();
+
         foreach (var target in oldTargets)
         {
             if (target.RenderTarget is RenderTarget2D rt)
@@ -116,11 +124,11 @@ public class PixellationSystem : ModSystem
         {
             var (action, type) = Actions[layer].Dequeue();
 
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, type == RenderType.Additive ? BlendState.Additive : BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.CreateScale(0.5f, 0.5f, 1f));
+            BlendState blend = (type == RenderType.Additive) ? BlendState.Additive : (type == RenderType.AlphaBlend) ? BlendState.AlphaBlend : TheBindingOfRarria.Subtractive;
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, blend, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.CreateScale(0.5f, 0.5f, 1f));
             action.Invoke();
             Main.spriteBatch.End();
         }
-
 
         Main.graphics.GraphicsDevice.SetRenderTargets(oldTargets); 
 

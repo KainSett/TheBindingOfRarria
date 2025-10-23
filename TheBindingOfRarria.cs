@@ -27,6 +27,32 @@ public class TheBindingOfRarria : Mod
     public static string drop = "\r\n| source | 1 | {{difficulty|chance}}";
     public static string itemPage = "{{mod sub-page}}<!--DO NOT REMOVE THIS LINE! It is required for Mod sub-pages to work properly.-->\r\n{{item infobox\r\n| type = Accessory\r\n| sell = {{value|p|g|s|c}}\r\n| stack = 1\r\n| rare = 0\r\n| tooltip = firstLine<br>\"flavor\"\r\n}}\r\n\r\n'''name''' is a [[Hardmode]] {{+|Accessories|accessory}} \r\n\r\n\r\n== Crafting ==\r\n=== Recipe ===\r\n{{recipes|result=#name}}\r\n\r\n\r\n== Notes ==\r\n{{*}} This item\r\n\r\n\r\n== Trivia ==\r\n* This item";
 
+    public static readonly BlendState Subtractive = new()
+    {
+        ColorBlendFunction = BlendFunction.ReverseSubtract,
+        ColorDestinationBlend = Blend.One,
+        ColorSourceBlend = Blend.SourceAlpha,
+        AlphaBlendFunction = BlendFunction.ReverseSubtract,
+        AlphaDestinationBlend = Blend.One,
+        AlphaSourceBlend = Blend.SourceAlpha
+    };
+
+    public enum PacketTypes : int
+    {
+        ProjectileReflect,
+        EntitySlow,
+        DustSpawn,
+        PlayerScale,
+        Default
+    }
+
+    public enum State
+    {
+        Default,
+        Slow,
+        Fast
+    }
+
     public static void GetWikiItemAndRecipePages(IEnumerable<ModItem> items)
     {
         foreach (var item in items)
@@ -129,32 +155,12 @@ public class TheBindingOfRarria : Mod
             ItemPages.Add(page);
         }
     }
+
     public override void PostAddRecipes()
     {
         //GetWikiItemAndRecipePages(GetContent<ModItem>());
     }
 
-
-    // fine
-    public enum PacketTypes : int
-    {
-        ProjectileReflect,
-        EntitySlow,
-        DustSpawn,
-        PlayerScale,
-        Default
-    }
-
-        // move to other file
-    public enum State
-    {
-        Default,
-        Slow,
-        Fast
-    }
-
-        // rewrite this mess
-        // mmmno
     public override void HandlePacket(BinaryReader reader, int whoAmI)
     {
         var type = reader.ReadInt32();

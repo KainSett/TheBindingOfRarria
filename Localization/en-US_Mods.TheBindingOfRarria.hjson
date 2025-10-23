@@ -1488,6 +1488,7 @@ Projectiles: {
 	GhizaWheelSaw.DisplayName: Ghiza Wheel Saw
 	RebelSwing.DisplayName: Rebel Swing
 	CurveSickleProj.DisplayName: Curve Sickle Proj
+	KokusenImpactVFX.DisplayName: Kokusen Impact V F X
 }
 
 Keybinds: {
