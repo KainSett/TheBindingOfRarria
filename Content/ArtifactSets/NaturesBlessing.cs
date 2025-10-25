@@ -9,7 +9,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class NaturesBlessing : IArtifactSet
 {
-    public string Name => "NaturesBlessing";
+    public string Name => nameof(NaturesBlessing);
 
     public Color NameColor => Color.Goldenrod;
 

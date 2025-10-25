@@ -14,7 +14,7 @@ public class Paladin : IArtifactSet
         ItemID.CrossNecklace,
         ItemType<CursedChain>()];
 
-    public string Name => "Paladin";
+    public string Name => nameof(Paladin);
 
     public Color NameColor => Color.Khaki;
 

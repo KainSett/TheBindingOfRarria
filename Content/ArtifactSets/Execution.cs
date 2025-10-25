@@ -8,7 +8,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Execution : IArtifactSet
 {
-    public string Name => "Execution";
+    public string Name => nameof(Execution);
 
     public Color NameColor => Color.IndianRed;
 

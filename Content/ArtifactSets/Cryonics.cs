@@ -13,7 +13,7 @@ public class Cryonics : IArtifactSet
         ItemID.ArcticDivingGear,
         ItemType<MedicalIceBag>()];
 
-    public string Name => "Cryonics";
+    public string Name => nameof(Cryonics);
 
     public Color NameColor => Color.SkyBlue;
 

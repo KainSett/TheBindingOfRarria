@@ -13,7 +13,7 @@ public class Spiritualism : IArtifactSet
         ItemType<BoundlessSpirit>(),
         ItemType<PhantomPopper>()];
 
-    public string Name => "Spiritualism";
+    public string Name => nameof(Spiritualism);
 
     public Color NameColor => new Color(130, 202, 255, 255);
 

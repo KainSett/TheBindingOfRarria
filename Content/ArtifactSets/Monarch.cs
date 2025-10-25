@@ -8,7 +8,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Monarch : IArtifactSet
 {
-    public string Name => "Monarch";
+    public string Name => nameof(Monarch);
 
     public Color NameColor => Color.DeepSkyBlue;
 

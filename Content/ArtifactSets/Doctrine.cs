@@ -9,7 +9,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Doctrine : IArtifactSet
 {
-    public string Name => "Doctrine";
+    public string Name => nameof(Doctrine);
 
     public Color NameColor => Color.Violet;
 

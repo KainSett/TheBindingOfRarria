@@ -1605,4 +1605,10 @@ ArtifactSets: {
 		Effect: Natural life regeneration cannot be reduced while under Doran's Shield's effect
 		Additional: Natural life regeneration cannot be reduced while under this effect
 	}
+
+	Kokusen: {
+		Name: Kokusen
+		Effect: Divergent's Fist's effect has a 10% chance to occur critically, resulting in a Black Flash
+		Additional: Has a 10& chance to cause a Black Flash instead
+	}
 }

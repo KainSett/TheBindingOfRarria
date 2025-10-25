@@ -9,7 +9,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Android : IArtifactSet
 {
-    public string Name => "Android";
+    public string Name => nameof(Android);
 
     public Color NameColor => Color.LightSlateGray;
 

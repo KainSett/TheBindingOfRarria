@@ -9,7 +9,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Instinct : IArtifactSet
 {
-    public string Name => "Instinct";
+    public string Name => nameof(Instinct);
 
     public Color NameColor => Color.PaleVioletRed;
 
