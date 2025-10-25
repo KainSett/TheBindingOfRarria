@@ -40,6 +40,6 @@ public class KokusenPlayer : ModPlayer
 
     public override void Load()
     {
-        ArtifactSetSystem.ArtifactSets.Add(new Kokusen());
+        //ArtifactSetSystem.ArtifactSets.Add(new Kokusen());
     }
 }

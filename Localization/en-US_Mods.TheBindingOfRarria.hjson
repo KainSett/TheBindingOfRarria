@@ -512,8 +512,8 @@ Items: {
 		DisplayName: Divergent's Fist
 		Tooltip:
 			'''
-			Melee attacks briefly sacrifice {0} defense to deal {1} damage after a delay
-			'One step closer to hitting a Awakening'
+			Melee attacks briefly sacrifice {0} [c/949494:(10% of your defense)] defense to deal {1} [c/949494:(50% of your defense)] damage after a delay
+			'One step closer to the Awakening'
 			'''
 	}
 
