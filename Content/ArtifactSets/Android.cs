@@ -16,7 +16,7 @@ public class Android : IArtifactSet
     public List<int> Items => 
         [ItemID.MechanicalGlove,
         ItemType<H20Volt>(),
-        ItemType<RobotCarcass>()];
+        ItemType<RobotInternals>()];
 
     public List<Predicate<int>> Artifacts { get; set; }
 

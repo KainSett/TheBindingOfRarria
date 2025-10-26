@@ -12,6 +12,7 @@ using Terraria.ModLoader;
 using TheBindingOfRarria.Common.Helpers;
 using TheBindingOfRarria.Common.Registries;
 using TheBindingOfRarria.Content.Projectiles;
+using TheBindingOfRarria.Content.Tiles;
 
 namespace TheBindingOfRarria.Content.Items;
 
@@ -37,9 +38,10 @@ public class H20Volt : ModItem
     public override void AddRecipes()
     {
         CreateRecipe()
+            .AddIngredient(ItemID.Timer1Second)
             .AddIngredient(ModContent.ItemType<Fulgurbloom>(), 4)
             .AddIngredient(ItemID.CopperBar, 2)
-            .AddTile(TileID.WorkBenches)
+            .AddTile(ModContent.TileType<TeslaStationTile>())
             .Register();
     }
 }

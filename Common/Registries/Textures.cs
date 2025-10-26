@@ -24,6 +24,8 @@ public static class Textures
 
     public static readonly Asset<Texture2D> TrailTexture2 = LoadTexture2D("TrailTexture2");
 
+    public static readonly Asset<Texture2D> ElectricLink = LoadTexture2D("ElectricLink");
+
 
     private static readonly Lazy<Asset<Texture2D>[]> _particle = new(() => LoadTexture2Ds("Particles/Particle", 2));
     public static Asset<Texture2D>[] Particles => _particle.Value;
