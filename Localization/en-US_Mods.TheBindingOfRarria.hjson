@@ -902,7 +902,7 @@ Items: {
 			'''
 			Converts half of your life regeneration to defense
 			Every 0.5 hp/s is converted to 3 defense
-			'A remnant of some droid'
+			'The core of droids'
 			'''
 	}
 
@@ -1339,6 +1339,11 @@ Items: {
 
 	TeslaStation: {
 		DisplayName: Tesla Station
+		Tooltip: ""
+	}
+
+	CopperWire: {
+		DisplayName: Copper Wire
 		Tooltip: ""
 	}
 }

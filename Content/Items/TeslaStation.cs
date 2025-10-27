@@ -18,9 +18,9 @@ public class TeslaStation : ModItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddIngredient(ItemID.Wire, 20)
+            .AddIngredient(ModContent.ItemType<CopperWire>(), 20)
             .AddIngredient(ItemID.IronBar, 6)
-            .AddIngredient(ModContent.ItemType<Fulgurbloom>(), 10)
+            .AddIngredient(ModContent.ItemType<Fulgurbloom>(), 8)
             .AddTile(TileID.HeavyWorkBench)
             .Register();
     }

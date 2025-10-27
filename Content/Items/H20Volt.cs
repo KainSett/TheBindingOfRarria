@@ -40,7 +40,7 @@ public class H20Volt : ModItem
         CreateRecipe()
             .AddIngredient(ItemID.Timer1Second)
             .AddIngredient(ModContent.ItemType<Fulgurbloom>(), 4)
-            .AddIngredient(ItemID.CopperBar, 2)
+            .AddIngredient(ModContent.ItemType<CopperWire>(), 10)
             .AddTile(ModContent.TileType<TeslaStationTile>())
             .Register();
     }

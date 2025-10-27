@@ -39,7 +39,7 @@ public class RobotInternals : ModItem
             .AddIngredient(ItemID.SoulofMight, 10)
             .AddIngredient(ModContent.ItemType<Fulgurbloom>(), 6)
             .AddIngredient(ItemID.IronBar, 10)
-            .AddIngredient(ItemID.Wire, 10)
+            .AddIngredient(ModContent.ItemType<CopperWire>(), 10)
             .AddIngredient(ItemID.WirePipe, 2)
             .AddTile(ModContent.TileType<TeslaStationTile>())
             .Register();
