@@ -22,6 +22,11 @@
 	    <HintPath>..\ModAssemblies\ShopExpander_v1.8.1.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
+	<ItemGroup>
+		<!-- Add every asset as an additional file so that our source generator can find it -->
+		<AdditionalFiles Include="Assets\**" />
+		<PackageReference Include="ZourceGen" Version="1.1.5" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+	</ItemGroup>
 	
 	<!-- Global usings!!!!! -->
 	<ItemGroup>

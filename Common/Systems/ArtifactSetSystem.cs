@@ -26,7 +26,7 @@ public class ArtifactSetSystem : ModSystem
 
     public override void Load()
     {
-        On_ItemSlot.DrawItemIcon += On_ItemSlot_DrawItemIcon;
+        //On_ItemSlot.DrawItemIcon += On_ItemSlot_DrawItemIcon;
     }
 
     private float On_ItemSlot_DrawItemIcon(On_ItemSlot.orig_DrawItemIcon orig, Item item, int context, SpriteBatch spriteBatch, Vector2 screenPositionForItemCenter, float scale, float sizeLimit, Color environmentColor)
