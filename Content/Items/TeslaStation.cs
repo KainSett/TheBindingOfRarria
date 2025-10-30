@@ -20,7 +20,7 @@ public class TeslaStation : ModItem
         CreateRecipe()
             .AddIngredient(ModContent.ItemType<CopperWire>(), 20)
             .AddIngredient(ItemID.IronBar, 6)
-            .AddIngredient(ModContent.ItemType<Fulgurbloom>(), 8)
+            .AddIngredient(ModContent.ItemType<Fulgurbloom>(), 5)
             .AddTile(TileID.HeavyWorkBench)
             .Register();
     }

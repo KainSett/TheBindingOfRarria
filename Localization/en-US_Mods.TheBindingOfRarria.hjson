@@ -1339,12 +1339,25 @@ Items: {
 
 	TeslaStation: {
 		DisplayName: Tesla Station
-		Tooltip: ""
+		Tooltip:
+			'''
+			Used for special crafting
+			'Advanced technology, don't ask how you know'
+			'''
 	}
 
 	CopperWire: {
 		DisplayName: Copper Wire
-		Tooltip: ""
+		Tooltip: "'Works even without insulation!'"
+	}
+
+	PlagueMask: {
+		DisplayName: Plague Mask
+		Tooltip:
+			'''
+			Nearby enemies lose 8 life per second
+			'Great for impersonating medieval doctors!'
+			'''
 	}
 }
 
