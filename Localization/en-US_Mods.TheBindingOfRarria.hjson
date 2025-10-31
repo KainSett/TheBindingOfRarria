@@ -1359,6 +1359,36 @@ Items: {
 			'Great for impersonating medieval doctors!'
 			'''
 	}
+
+	PaleGreaves: {
+		DisplayName: Pale Greaves
+		Tooltip: ""
+	}
+
+	PaleHelm: {
+		DisplayName: Pale Helm
+		Tooltip: ""
+		SetBonus:
+			'''
+			Increases length of invincibility proportionally to the time passed since last hit taken
+			Up to 1 additional second of invincibility for 30 seconds
+			'''
+	}
+
+	PalePlatemail: {
+		DisplayName: Pale Platemail
+		Tooltip: ""
+	}
+
+	RampartGolemChestplate: {
+		DisplayName: Rampart Golem Chestplate
+		Tooltip: ""
+	}
+
+	RampartGolemHelm: {
+		DisplayName: Rampart Golem Helm
+		Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -1512,6 +1542,7 @@ Projectiles: {
 	RebelSwing.DisplayName: Rebel Swing
 	CurveSickleProj.DisplayName: Curve Sickle Proj
 	KokusenImpactVFX.DisplayName: Kokusen Impact V F X
+	StalwartAura.DisplayName: Stalwart Aura
 }
 
 Keybinds: {

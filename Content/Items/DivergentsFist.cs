@@ -22,8 +22,8 @@ public class DivergentsFist : ModItem
     public override void SetDefaults()
     {
         Item.accessory = true;
-        Item.width = 26;
-        Item.height = 32;
+        Item.width = 34;
+        Item.height = 40;
         Item.rare = ItemRarityID.Pink;
         Item.value = Item.sellPrice(0, 3);
     }

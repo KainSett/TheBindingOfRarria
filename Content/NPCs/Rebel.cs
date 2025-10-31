@@ -47,7 +47,7 @@ public class Rebel : ModNPC
         NPC.knockBackResist = 0f;
         NPC.value = Item.buyPrice(gold: 2);
         NPC.rarity = 3; 
-        NPC.npcSlots = 5f;
+        NPC.npcSlots = 8f;
 
         NPC.aiStyle = -1;
     }
@@ -55,7 +55,7 @@ public class Rebel : ModNPC
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
         if (spawnInfo.SpawnTileType is TileID.BlueDungeonBrick or TileID.GreenDungeonBrick or TileID.PinkDungeonBrick && Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY - 1].WallType == 0)
-            return 0.4f;
+            return 0.2f;
 
         return 0;
     }
