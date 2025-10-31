@@ -1388,6 +1388,11 @@ Items: {
 	RampartGolemHelm: {
 		DisplayName: Rampart Golem Helm
 		Tooltip: ""
+		SetBonus:
+			'''
+			Every incoming attack is frozen and is applied to you instead of the next one
+			The frozen hit loses potency over time
+			'''
 	}
 }
 

@@ -56,7 +56,7 @@ public class RampartPlayer : ModPlayer
 
     public override void ResetEffects()
     {
-        if (!Rampart || counter <= 0)
+        if (!Rampart)
             hit = (0, 0);
 
         Rampart = false;
@@ -64,7 +64,13 @@ public class RampartPlayer : ModPlayer
 
     public override void PostUpdate()
     {
-        counter = Math.Max(0, counter - 1);
+        counter = (counter + 1) % 60;
+
+        if (counter == 0)
+        { 
+            hit.damage = Math.Max(0, hit.damage - 2);
+            hit.source = Math.Max(0, hit.source - 2);
+        }
     }
 
     public override void Load()
@@ -76,11 +82,16 @@ public class RampartPlayer : ModPlayer
     {
         if (self.TryGetModPlayer<RampartPlayer>(out var p) && p.Rampart)
         {
-            p.counter = 180;
+            if (p.hit != (0, 0))
+            {
+                var D = Damage;
+                Damage = p.hit.source;
+                p.hit.source = D;
+            }
             var dmg = orig(self, damageSource, Damage, hitDirection, out info, pvp, quiet, cooldownCounter, dodgeable, armorPenetration, scalingArmorPenetration, knockback);
             if (p.hit == (0, 0))
             {
-
+                p.hit.source = Damage;
             }
             else
             {
@@ -88,8 +99,6 @@ public class RampartPlayer : ModPlayer
                 info.SourceDamage = p.hit.source;
                 info.Damage = (int)dmg;
             }
-
-            p.hit.source = Damage;
 
             Player.HurtModifiers hurtModifiers = new()
             {
@@ -115,7 +124,7 @@ public class RampartPlayer : ModPlayer
 
     public override void ModifyHurt(ref Player.HurtModifiers modifiers)
     {
-        if (Player.TryGetModPlayer<RampartPlayer>(out var p) && p.Rampart && p.counter == 180 && p.hit == (0, 0))
+        if (Player.TryGetModPlayer<RampartPlayer>(out var p) && p.Rampart && p.hit == (0, 0))
         {
             modifiers.Cancel();
             Player.AddImmuneTime(modifiers.CooldownCounter, 60);
