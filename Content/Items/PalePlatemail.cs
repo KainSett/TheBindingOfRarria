@@ -23,7 +23,7 @@ public class PalePlatemail : ModItem
 
     public override void UpdateEquip(Player player)
     {
-
+        player.aggro += 200;
     }
 
     public override void AddRecipes()

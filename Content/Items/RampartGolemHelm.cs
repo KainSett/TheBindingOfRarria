@@ -1,4 +1,5 @@
 using System;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
 
 namespace TheBindingOfRarria.Content.Items;
@@ -15,17 +16,17 @@ public class RampartGolemHelm : ModItem
 
     public override void SetDefaults()
     {
-        Item.width = 22;
-        Item.height = 18;
-        Item.defense = 12;
-        Item.lifeRegen = 2;
-        Item.rare = ItemRarityID.LightRed;
-        Item.value = Item.sellPrice(0, 4, 0, 0);
+        Item.width = 26;
+        Item.height = 28;
+        Item.defense = 19;
+        Item.rare = ItemRarityID.Lime;
+        Item.value = Item.sellPrice(0, 5, 0, 0);
     }
 
     public override void UpdateEquip(Player player)
     {
-        player.GetDamage(DamageClass.Generic) += 0.08f;
+        player.GetDamage(DamageClass.Generic) += 0.15f;
+        player.GetCritChance(DamageClass.Generic) += 15f;
     }
 
     public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -42,7 +43,19 @@ public class RampartGolemHelm : ModItem
 
     public override void ArmorSetShadows(Player player)
     {
-        player.armorEffectDrawOutlines = true;
+        player.armorEffectDrawShadowSubtle = true;
+    }
+}
+public class RampartLootNPC : GlobalNPC
+{
+    public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
+    {
+        if (npc.type == NPCID.IceGolem)
+        {
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.DownedPlantera(), ModContent.ItemType<RampartGolemChestplate>(), 6));
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.DownedPlantera(), ModContent.ItemType<RampartGolemHelm>(), 6));
+        }
+        base.ModifyNPCLoot(npc, npcLoot);
     }
 }
 
@@ -64,12 +77,12 @@ public class RampartPlayer : ModPlayer
 
     public override void PostUpdate()
     {
-        counter = (counter + 1) % 60;
+        counter = (counter + 1) % 40;
 
         if (counter == 0)
         { 
-            hit.damage = Math.Max(0, hit.damage - 2);
-            hit.source = Math.Max(0, hit.source - 2);
+            hit.damage = Math.Max(0, hit.damage - 1);
+            hit.source = Math.Max(0, hit.source - 1);
         }
     }
 
@@ -80,7 +93,7 @@ public class RampartPlayer : ModPlayer
 
     private static double StoreHitRampart(On_Player.orig_Hurt_PlayerDeathReason_int_int_refHurtInfo_bool_bool_int_bool_float_float_float orig, Player self, PlayerDeathReason damageSource, int Damage, int hitDirection, out Player.HurtInfo info, bool pvp, bool quiet, int cooldownCounter, bool dodgeable, float armorPenetration, float scalingArmorPenetration, float knockback)
     {
-        if (self.TryGetModPlayer<RampartPlayer>(out var p) && p.Rampart)
+        if (dodgeable && self.TryGetModPlayer<RampartPlayer>(out var p) && p.Rampart)
         {
             if (p.hit != (0, 0))
             {

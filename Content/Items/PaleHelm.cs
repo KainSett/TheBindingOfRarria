@@ -32,7 +32,7 @@ public class PaleHelm : ModItem
 
     public override void UpdateEquip(Player player)
     {
-
+        player.aggro += 100;
     }
 
     public override bool IsArmorSet(Item head, Item body, Item legs)

@@ -18,6 +18,9 @@
 	  <Reference Include="Daybreak">
 	    <HintPath>..\ModAssemblies\Daybreak_v2.1.0.dll</HintPath>
 	  </Reference>
+	  <Reference Include="ModLiquidLib">
+	    <HintPath>..\ModAssemblies\ModLiquidLib_v2025.9.dll</HintPath>
+	  </Reference>
 	  <Reference Include="ShopExpander">
 	    <HintPath>..\ModAssemblies\ShopExpander_v1.8.1.dll</HintPath>
 	  </Reference>

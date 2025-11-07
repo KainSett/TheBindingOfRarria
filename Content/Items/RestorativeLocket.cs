@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 
 namespace TheBindingOfRarria.Content.Items;
-
+/*
 public class RestorativeLocket : ModItem
 {
     public override string Texture => ContentPath + "Items/" + Name;
@@ -42,7 +42,7 @@ public partial class NurseItemsShop : GlobalNPC
             items[index + 1] = new Item(ModContent.ItemType<RestorativeLocket>());
         }
     }
-}
+}*/
 
 public class RestorativeDebuffsLocketPlayer : ModPlayer
 {

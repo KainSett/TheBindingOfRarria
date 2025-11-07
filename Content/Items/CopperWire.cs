@@ -10,6 +10,7 @@ public class CopperWire : ModItem
         Item.height = 20;
         Item.rare = ItemRarityID.Orange;
         Item.value = Item.sellPrice(0, 0, 1);
+        Item.maxStack = Item.CommonMaxStack;
     }
 
     public override void AddRecipes()

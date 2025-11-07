@@ -24,7 +24,7 @@ public class PharmaceuticRounds : ModItem
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
         Item.knockBack = 2f;
-        Item.value = 15;
+        Item.value = 30;
         Item.expert = true;
         Item.shoot = ModContent.ProjectileType<PharmaceuticBullet>(); 
         Item.shootSpeed = 4f; 
@@ -46,6 +46,6 @@ public partial class NurseItemsShop : GlobalNPC
         }
 
         AddBloodBag(npc, ref items);
-        AddHealLocket(npc, ref items);
+        //AddHealLocket(npc, ref items);
     }
 }

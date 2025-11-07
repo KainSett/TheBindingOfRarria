@@ -12,16 +12,16 @@ public class RampartGolemChestplate : ModItem
 
     public override void SetDefaults()
     {
-        Item.width = 30;
+        Item.width = 34;
         Item.height = 26;
-        Item.defense = 13;
-        Item.lifeRegen = 2;
-        Item.rare = ItemRarityID.LightRed;
-        Item.value = Item.sellPrice(0, 3, 50, 0);
+        Item.defense = 25;
+        Item.rare = ItemRarityID.Lime;
+        Item.value = Item.sellPrice(0, 5, 0, 0);
     }
 
     public override void UpdateEquip(Player player)
     {
-        player.GetDamage(DamageClass.Generic) += 0.08f;
+        player.GetDamage(DamageClass.Generic) += 0.10f;
+        player.GetCritChance(DamageClass.Generic) += 10f;
     }
 }

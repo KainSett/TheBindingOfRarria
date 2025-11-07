@@ -23,7 +23,7 @@ public class PaleGreaves : ModItem
 
     public override void UpdateEquip(Player player)
     {
-
+        player.aggro += 100;
     }
 
     public override void AddRecipes()
