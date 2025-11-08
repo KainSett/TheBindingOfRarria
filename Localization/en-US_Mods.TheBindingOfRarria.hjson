@@ -1440,6 +1440,15 @@ Items: {
 			'One can never have "enough" health'
 			'''
 	}
+
+	WarFlame: {
+		DisplayName: War Flame
+		Tooltip:
+			'''
+			Every time a fire-based debuff is applied to an enemy near you, half of the duration added is instantly expended as direct damage
+			'Ceaseless burning'
+			'''
+	}
 }
 
 Buffs: {
