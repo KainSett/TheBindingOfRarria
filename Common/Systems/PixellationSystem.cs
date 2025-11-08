@@ -16,8 +16,7 @@ public class PixellationSystem : ModSystem
     public enum RenderType
     {
         Additive,
-        AlphaBlend,
-        Subtractive //har har har black
+        AlphaBlend
     }
 
     public enum RenderLayer
@@ -26,7 +25,8 @@ public class PixellationSystem : ModSystem
         Projectiles
     }
 
-    private static RenderTarget2D Target { get; set; }
+    private static RenderTarget2D AlphaBlendTarget { get; set; }
+    private static RenderTarget2D AdditiveTarget { get; set; }
 
     private static Dictionary<RenderLayer, Queue<(Action, RenderType)>> Actions { get; set; } = [];
 
@@ -37,7 +37,12 @@ public class PixellationSystem : ModSystem
             Main.OnResolutionChanged += InitializeRT;
             Main.RunOnMainThread(() =>
             {
-                Target = new(Main.instance.GraphicsDevice,
+                AlphaBlendTarget = new(Main.instance.GraphicsDevice,
+                    Main.screenWidth / 2, Main.screenHeight / 2,
+                    false, SurfaceFormat.Color, DepthFormat.None, 0,
+                    RenderTargetUsage.PreserveContents
+                );
+                AdditiveTarget = new(Main.instance.GraphicsDevice,
                     Main.screenWidth / 2, Main.screenHeight / 2,
                     false, SurfaceFormat.Color, DepthFormat.None, 0,
                     RenderTargetUsage.PreserveContents
@@ -66,13 +71,15 @@ public class PixellationSystem : ModSystem
         if (Main.dedServ)
             return;
 
-        Target?.Dispose();
+        AlphaBlendTarget?.Dispose();
+        AdditiveTarget?.Dispose();
 
         GraphicsDevice gd = Main.instance.GraphicsDevice;
         int width = Main.screenWidth / 2;
         int height = Main.screenHeight / 2;
 
-        Target = new(gd, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+        AlphaBlendTarget = new(gd, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+        AdditiveTarget = new(gd, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
     }
 
     public static void QueuePixellationAction(Action action, RenderType type, RenderLayer layer)
@@ -99,7 +106,6 @@ public class PixellationSystem : ModSystem
 
         if (gd.PresentationParameters.RenderTargetUsage != RenderTargetUsage.PreserveContents)
         {
-            Main.NewText("oppa gangnam style");
             gd.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
         }
 
@@ -117,15 +123,30 @@ public class PixellationSystem : ModSystem
         if (beginned)
             Main.spriteBatch.End(out parameters);
 
-        gd.SetRenderTarget(Target);
+        gd.SetRenderTarget(AlphaBlendTarget);
         gd.Clear(Color.Transparent);
 
         for (int i = 0; i < Actions[layer].Count; i++)
         {
             var (action, type) = Actions[layer].Dequeue();
+            if (type != RenderType.AlphaBlend)
+                continue;
 
-            BlendState blend = (type == RenderType.Additive) ? BlendState.Additive : (type == RenderType.AlphaBlend) ? BlendState.AlphaBlend : TheBindingOfRarria.Subtractive;
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, blend, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.CreateScale(0.5f, 0.5f, 1f));
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.CreateScale(0.5f, 0.5f, 1f));
+            action.Invoke();
+            Main.spriteBatch.End();
+        }
+
+        gd.SetRenderTarget(AdditiveTarget);
+        gd.Clear(Color.Transparent);
+
+        for (int i = 0; i < Actions[layer].Count; i++)
+        {
+            var (action, type) = Actions[layer].Dequeue();
+            if (type != RenderType.Additive)
+                continue;
+
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.CreateScale(0.5f, 0.5f, 1f));
             action.Invoke();
             Main.spriteBatch.End();
         }
@@ -133,7 +154,11 @@ public class PixellationSystem : ModSystem
         Main.graphics.GraphicsDevice.SetRenderTargets(oldTargets); 
 
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-        Main.spriteBatch.Draw(Target, new Vector2(0), null, Color.White, 0, new Vector2(0), 2, SpriteEffects.None, 0);
+        Main.spriteBatch.Draw(AdditiveTarget, new Vector2(0), null, Color.White, 0, new Vector2(0), 2, SpriteEffects.None, 0);
+        Main.spriteBatch.End();
+
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+        Main.spriteBatch.Draw(AlphaBlendTarget, new Vector2(0), null, Color.White, 0, new Vector2(0), 2, SpriteEffects.None, 0);
         Main.spriteBatch.End();
 
         if (beginned)

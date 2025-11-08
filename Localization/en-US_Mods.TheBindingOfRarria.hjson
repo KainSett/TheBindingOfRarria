@@ -1299,7 +1299,7 @@ Items: {
 		Tooltip:
 			'''
 			Healing potions grant lifesteal for 8 seconds instead of healing you
-			Lifesteal limit is higher
+			All lifesteal recovers faster
 			'Rip and tear'
 			'''
 	}
@@ -1449,6 +1449,16 @@ Items: {
 			'Ceaseless burning'
 			'''
 	}
+
+	MortalWard: {
+		DisplayName: Mortal Ward
+		Tooltip:
+			'''
+			When falling below {0} [c/90ee90:(33% of your max life)] life, become immune to all status effects and unable to gain or lose life for 5 seconds
+			This ability only recharges when your life is full again
+			'A frightening thing to carry around, this one is'
+			'''
+	}
 }
 
 Buffs: {
@@ -1557,6 +1567,11 @@ Buffs: {
 	}
 
 	NobleWine_CD.DisplayName: Noble Wine_ C D
+
+	DeathsDoor: {
+		DisplayName: Deaths Door
+		Description: Mods.TheBindingOfRarria.Buffs.DeathsDoor.Description
+	}
 }
 
 Projectiles: {

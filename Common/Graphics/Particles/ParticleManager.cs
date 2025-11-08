@@ -185,7 +185,7 @@ public class ParticleManager : ModSystem //goated ass handler that can easily dr
                     handler.DrawPixelParticles(Main.spriteBatch, CollectionsMarshal.AsSpan(handler.Particles));
                 }
 
-            }, PixellationSystem.RenderType.Subtractive, PixellationSystem.RenderLayer.Projectiles);
+            }, PixellationSystem.RenderType.AlphaBlend, PixellationSystem.RenderLayer.Projectiles);
         }
     }
 

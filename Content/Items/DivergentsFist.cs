@@ -91,23 +91,13 @@ public class YujiItemPlayer : ModPlayer
 
                 if (Main.myPlayer == Player.whoAmI)
                 {
-                    ParticleManager.SpawnParticle<PixelatedAdditiveParticleHandler>(target.Center, Vector2.Zero, 20, new(0.7f, 0.8f, 0.85f, 0), Color.DarkRed, new(1, 1), ParticleTextureType.FadedGlowyBall, [0]);
-
-                    for (int i = 0; i < 12; i++)
-                    {
-                        Vector2 vel = Main.rand.NextVector2Circular(4, 4);
-
-                        ParticleManager.SpawnParticle<PixelatedAdditiveParticleHandler>(target.Center, vel * 3f, 2, new(0.25f, 0.1f, 2f, 0), Color.Crimson, new(3f + vel.Length() / 10f, 0.11f), ParticleTextureType.FadedGlowyBall, [0.96f]);
-                        ParticleManager.SpawnParticle<PixelatedAdditiveParticleHandler>(target.Center, vel, 35, new(0.27f, 0.18f, 1.85f, 0), Color.DarkRed, new(1 + vel.Length() / 10f, 0.1f), ParticleTextureType.FadedGlowyBall, [0.6f]);
-                    }
-
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < 2; i++)
                     {
                         var proj = Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, Vector2.Zero, ProjectileType<KokusenImpactVFX>(), 0, 0, Main.myPlayer);
                         var bolt = proj.ModProjectile as KokusenImpactVFX;
 
                         bolt.AnchorPoint = target.Center;
-                        bolt.EndOffset = Main.rand.NextVector2Circular(13f, 13f);
+                        bolt.EndOffset = target.Center.DirectionTo(Player.Center).RotatedBy(Main.rand.NextFloat() * PiOver4 - PiOver4 / 2);
                         bolt.StartOffset = bolt.EndOffset + Vector2.Normalize(bolt.EndOffset) * Main.rand.NextFloat(10, 100);
                         //proj.ai[1] = Main.rand.Next(0, 2); //used to randomize drawing the red bit or not
                     }
@@ -269,6 +259,46 @@ public class KokusenImpactVFX : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
+        PixellationSystem.QueuePixellationAction(() => 
+        {
+            Texture2D texture = Textures.Particles[0].Value;
+
+            for (int i = 1; i < positions.Count; i++)
+            {
+                Vector2 start = positions[i - 1];
+                Vector2 end = positions[i];
+
+                float count = (end - start).Length() * 2f;
+
+                for (int j = 0; j < count; j++)
+                {
+                    float lerp = j / (float)count;
+                    Vector2 drawPos = Vector2.Lerp(start, end, lerp);
+
+                    Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
+                        null, Color.Black * Projectile.Opacity * Projectile.scale * (0.85f + (Projectile.ai[1] / 2f)), 0f,
+                        texture.Size() / 2, Projectile.scale * 0.02f,
+                        SpriteEffects.None
+                    );
+
+                    if (Projectile.ai[1] == 0)
+                    {
+                        Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
+                            null, Color.Lerp(Color.Black, Color.Black, 0.37f) with { A = 0 } * Projectile.Opacity * Projectile.scale * 0.5f, 0f,
+                            texture.Size() / 2, Projectile.scale * 0.032f,
+                            SpriteEffects.None
+                        );
+
+                        Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
+                          null, Color.Lerp(Color.Black, Color.Black, 0.87f) with { A = 0 } * Projectile.Opacity * Projectile.scale * 1.5f, 0f,
+                          texture.Size() / 2, Projectile.scale * 0.021f,
+                          SpriteEffects.None
+                        );
+                    }
+                }
+            }
+        }, PixellationSystem.RenderType.AlphaBlend, PixellationSystem.RenderLayer.Projectiles);
+
         PixellationSystem.QueuePixellationAction(() =>
         {
             Texture2D texture = Textures.Particles[0].Value;
@@ -286,12 +316,12 @@ public class KokusenImpactVFX : ModProjectile
                     Vector2 drawPos = Vector2.Lerp(start, end, lerp);
 
                     Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
-                        null, Color.Black * Projectile.Opacity * Projectile.scale * (0.15f + (Projectile.ai[1] / 2f)), 0f,
-                        texture.Size() / 2, Projectile.scale * 0.03f,
+                        null, Color.Red * Projectile.Opacity * Projectile.scale, 0f,
+                        texture.Size() / 2, Projectile.scale * 0.10f,
                         SpriteEffects.None
                     );
 
-                    if (Projectile.ai[1] == 0)
+                    if (Projectile.ai[1] == 1)
                     {
                         Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
                             null, Color.Lerp(Color.Red, Color.DarkRed, 0.37f) * Projectile.Opacity * Projectile.scale * 0.5f, 0f,
@@ -310,42 +340,6 @@ public class KokusenImpactVFX : ModProjectile
 
         }, PixellationSystem.RenderType.Additive, PixellationSystem.RenderLayer.Projectiles);
 
-        Texture2D texture = Textures.Particles[0].Value;
-
-        for (int i = 1; i < positions.Count; i++)
-        {
-            Vector2 start = positions[i - 1];
-            Vector2 end = positions[i];
-
-            float count = (end - start).Length() * 2f;
-
-            for (int j = 0; j < count; j++)
-            {
-                float lerp = j / (float)count;
-                Vector2 drawPos = Vector2.Lerp(start, end, lerp);
-
-                Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
-                    null, Color.Black * Projectile.Opacity * Projectile.scale * (0.85f + (Projectile.ai[1] / 2f)), 0f,
-                    texture.Size() / 2, Projectile.scale * 0.03f,
-                    SpriteEffects.None
-                );
-
-                if (Projectile.ai[1] == 0)
-                {
-                    Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
-                        null, Color.Lerp(Color.Red, Color.DarkRed, 0.37f) with { A = 0 } * Projectile.Opacity * Projectile.scale * 0.5f, 0f,
-                        texture.Size() / 2, Projectile.scale * 0.032f,
-                        SpriteEffects.None
-                    );
-
-                    Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
-                      null, Color.Lerp(Color.DarkBlue, Color.DarkRed, 0.87f) with { A = 0 } * Projectile.Opacity * Projectile.scale * 1.5f, 0f,
-                      texture.Size() / 2, Projectile.scale * 0.021f,
-                      SpriteEffects.None
-                    );
-                }
-            }
-        }
 
         return false;
     }
