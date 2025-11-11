@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
 using TheBindingOfRarria.Common.Helpers;
@@ -28,7 +29,7 @@ public class PixellationSystem : ModSystem
     private static RenderTarget2D AlphaBlendTarget { get; set; }
     private static RenderTarget2D AdditiveTarget { get; set; }
 
-    private static Dictionary<RenderLayer, Queue<(Action, RenderType)>> Actions { get; set; } = [];
+    private static Dictionary<RenderLayer, List<(Action, RenderType)>> Actions { get; set; } = [];
 
     public override void Load()
     {
@@ -84,14 +85,14 @@ public class PixellationSystem : ModSystem
 
     public static void QueuePixellationAction(Action action, RenderType type, RenderLayer layer)
     {
-        if (!Actions.TryGetValue(layer, out Queue<(Action, RenderType)> value))
+        if (!Actions.TryGetValue(layer, out List<(Action, RenderType)> value))
         {
-            var nullQueue = new Queue<(Action, RenderType)>();
+            var nullQueue = new List<(Action, RenderType)>();
             value = nullQueue;
             Actions.Add(layer, value);
         }
 
-        value.Enqueue((action, type));
+        value.Add((action, type));
     }
 
     /// <summary>
@@ -99,7 +100,7 @@ public class PixellationSystem : ModSystem
     /// </summary>
     private static void DrawPixellated(RenderLayer layer)
     {
-        if (Actions is null || Actions.Count <= 0 || !Actions.TryGetValue(layer, out Queue<(Action action, RenderType type)> value) || value is null || value.Count <= 0)
+        if (Actions is null || Actions.Count <= 0 || !Actions.TryGetValue(layer, out List<(Action action, RenderType type)> value) || value is null || value.Count <= 0)
             return;
 
         var gd = Main.graphics.GraphicsDevice;
@@ -126,29 +127,37 @@ public class PixellationSystem : ModSystem
         gd.SetRenderTarget(AlphaBlendTarget);
         gd.Clear(Color.Transparent);
 
-        for (int i = 0; i < Actions[layer].Count; i++)
+        var actions = Actions[layer].FindAll(a => a.Item2 == RenderType.AlphaBlend);
+        while (actions.Count > 0)
         {
-            var (action, type) = Actions[layer].Dequeue();
+            var (action, type) = actions.LastOrDefault();
             if (type != RenderType.AlphaBlend)
                 continue;
 
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.CreateScale(0.5f, 0.5f, 1f));
             action.Invoke();
             Main.spriteBatch.End();
+
+            Actions[layer].Remove((action, type));
+            actions.Remove((action, type));
         }
 
         gd.SetRenderTarget(AdditiveTarget);
         gd.Clear(Color.Transparent);
 
-        for (int i = 0; i < Actions[layer].Count; i++)
+        actions = Actions[layer].FindAll(a => a.Item2 == RenderType.Additive);
+        while (actions.Count > 0)
         {
-            var (action, type) = Actions[layer].Dequeue();
+            var (action, type) = actions.LastOrDefault();
             if (type != RenderType.Additive)
                 continue;
 
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.CreateScale(0.5f, 0.5f, 1f));
             action.Invoke();
             Main.spriteBatch.End();
+
+            Actions[layer].Remove((action, type));
+            actions.Remove((action, type));
         }
 
         Main.graphics.GraphicsDevice.SetRenderTargets(oldTargets); 

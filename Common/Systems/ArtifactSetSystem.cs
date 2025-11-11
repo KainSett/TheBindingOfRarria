@@ -34,7 +34,7 @@ public class ArtifactSetSystem : ModSystem
         if (Main.LocalPlayer.TryGetModPlayer<ArtifactSetPlayer>(out var p) && p.Sets is not null && p.Sets.Count > 0 && p.Sets.All(s => s.Artifacts is not null && s.Artifacts.Count > 0) && p.Sets.Any(s => s.Contains(item.type) && s.Count >= s.Artifacts.Count) && p.Equipped.Contains(item.type))
         {
             var texture = Textures._light[2];
-            var color = environmentColor.MultiplyRGB(p.Sets.FirstOrDefault(s => s.Contains(item.type)).NameColor) * 1.0f;
+            var color = environmentColor.MultiplyRGB(p.Sets.FirstOrDefault(s => s.Contains(item.type) && s.Count >= s.Artifacts.Count).NameColor) * 1.0f;
             color.A = 0;
             var rotation = Main.GlobalTimeWrappedHourly * 2 + item.type;
             var Scale = 0.07f + 0.01f * float.Sin(Main.GlobalTimeWrappedHourly);

@@ -28,6 +28,8 @@ public class HealthStone : ModItem
 
 public class HealthHeartPlayer : ModPlayer
 {
+    public int counter = 0;
+
     public int Power = 0;
 
     public bool Health = false;
@@ -58,7 +60,7 @@ public class HealthHeartPlayer : ModPlayer
 
     private static bool On_Player_AddBuff_ActuallyTryToAddTheBuff(On_Player.orig_AddBuff_ActuallyTryToAddTheBuff orig, Player self, int type, int time)
     {
-        if (time > 3 && !self.HasBuff(type) && !Main.debuff[type] && self.TryGetModPlayer<HealthHeartPlayer>(out var p) & p.Health && !p.Buffs.ContainsKey(type))
+        if (!Main.buffNoTimeDisplay[type] && time > 3 && !self.HasBuff(type) && !Main.debuff[type] && self.TryGetModPlayer<HealthHeartPlayer>(out var p) & p.Health && !p.Buffs.ContainsKey(type) && p.counter == 0)
         {
             if (p.Power > 1)
                 self.GetModPlayer<TemporaryLifePlayer>().bonuses.Add(new LifeBonus(p.Power * 10, time, cond => self.dead, "Health"));
@@ -69,6 +71,8 @@ public class HealthHeartPlayer : ModPlayer
             }
 
             p.Buffs.Add(type, time);
+
+            p.counter = 600;
         }
 
         return orig(self, type, time);
@@ -83,6 +87,7 @@ public class HealthHeartPlayer : ModPlayer
                 Buffs.Remove(b.Key);
         }
 
+        counter = Math.Max(0, counter - 1);
         Power = 0;
     }
 }

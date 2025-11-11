@@ -3,7 +3,7 @@ using Terraria.UI.Chat;
 using TheBindingOfRarria.Content.Items;
 
 namespace TheBindingOfRarria.Content.Buffs;
-
+/*
 public class SteelEndurance : ModBuff
 {
     public override string Texture => ContentPath + "Buffs/" + Name;
@@ -27,4 +27,4 @@ public class SteelEndurance : ModBuff
         //spriteBatch.DrawString(font, text, position, color, 0, origin + new Vector2(6f * (Main.LocalPlayer.GetModPlayer<GeneThiefPlayer>().genePool / 50), 4.5f), 0.8f, SpriteEffects.None, 0);
         //spriteBatch.DrawString(font, text, position, Color.White, 0, origin + new Vector2(6.5f * (Main.LocalPlayer.GetModPlayer<GeneThiefPlayer>().genePool / 50), 5), 0.7f, SpriteEffects.None, 0);
     }
-}
+}*/

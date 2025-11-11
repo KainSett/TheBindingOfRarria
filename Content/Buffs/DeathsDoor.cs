@@ -11,6 +11,7 @@ public class DeathsDoor : ModBuff
         for (int i = 0; i < player.buffImmune.Length; i++)
             player.buffImmune[i] = true;
 
+        player.potionDelayTime = 0;
         player.buffImmune[Type] = false;
 
         player.statLife = player.GetModPlayer<DeathsDoorPlayer>().life;

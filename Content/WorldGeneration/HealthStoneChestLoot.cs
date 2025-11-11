@@ -16,7 +16,7 @@ public class HealthStoneChestLoot : ModSystem
 
         for (int chestIndex = Main.maxChests; chestIndex > 2; chestIndex -= 2)
         {
-            Chest chest = Main.chest[chestIndex];
+            Chest chest = Main.chest[chestIndex - 1];
 
             if (chest == null)
                 continue;

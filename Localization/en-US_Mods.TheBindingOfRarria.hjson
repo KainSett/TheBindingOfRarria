@@ -1437,6 +1437,7 @@ Items: {
 			'''
 			Duration of all buffs on you is increased by 20%
 			Whenever a new buff is applied to you, drop a healing heart
+			Cannot drop a heart more than once every 10 seconds
 			'One can never have "enough" health'
 			'''
 	}
@@ -1561,17 +1562,17 @@ Buffs: {
 		Description: Increased endurance by 3% per stack
 	}
 
+	DeathsDoor: {
+		DisplayName: Death's Door
+		Description: Your life is static
+	}
+
 	NobleWine: {
 		DisplayName: Noble Wine
 		Description: Mods.TheBindingOfRarria.Buffs.NobleWine.Description
 	}
 
 	NobleWine_CD.DisplayName: Noble Wine_ C D
-
-	DeathsDoor: {
-		DisplayName: Deaths Door
-		Description: Mods.TheBindingOfRarria.Buffs.DeathsDoor.Description
-	}
 }
 
 Projectiles: {

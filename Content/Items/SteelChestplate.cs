@@ -4,7 +4,7 @@ using TheBindingOfRarria.Common.Config;
 using TheBindingOfRarria.Content.Buffs;
 
 namespace TheBindingOfRarria.Content.Items;
-
+/*
 [AutoloadEquip(EquipType.Body)]
 public class SteelChestplate : ModItem
 {
@@ -15,6 +15,7 @@ public class SteelChestplate : ModItem
         Item.width = 32;
         Item.height = 28;
         Item.value = Item.sellPrice(0, 4);
+        Item.defense = 5;
         Item.rare = ItemRarityID.Orange;
     }
 
@@ -61,4 +62,4 @@ public class SteelPlayer : ModPlayer
         else if (Player.HasBuff(ModContent.BuffType<SteelEndurance>()))
             Player.ClearBuff(ModContent.BuffType<SteelEndurance>());
     }
-}
+}*/
