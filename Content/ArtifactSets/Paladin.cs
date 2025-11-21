@@ -12,7 +12,7 @@ public class Paladin : IArtifactSet
     public List<int> Items => [
         ItemID.PaladinsShield,
         ItemID.CrossNecklace,
-        ItemType<CursedChain>()];
+        ItemID.ObsidianShield];
 
     public string Name => nameof(Paladin);
 
@@ -51,6 +51,6 @@ public class PaladinPlayer : ModPlayer
             p.paladin = false;
         }
 
-        else orig(self);
+        orig(self);
     }
 }

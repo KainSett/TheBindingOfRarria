@@ -686,7 +686,7 @@ Items: {
 		Tooltip:
 			'''
 			Grants tremendously increased life regeneration [c/90ee90:(5 hp/s)]
-			Your life cannot exceed {0} [c/90ee90:({1}% of your max life)], and attacks against you have 10% increased damage
+			Your life cannot exceed {0} [c/90ee90:({1}% of your max life)]
 			'The prized, oaky flavor of Sangreal is a noble privilege. Can you handle it?'
 			'''
 		DeathMessage: "{0} couldn't handle the power of noble alcohol"
@@ -1460,6 +1460,50 @@ Items: {
 			'A frightening thing to carry around, this one is'
 			'''
 	}
+
+	CandleOfLife: {
+		DisplayName: Candle of Life
+		Tooltip:
+			'''
+			Grants increased life regeneration [c/90ee90:(2 hp/s)]
+			Natural life regeneration ramps up 400% faster
+			Your max life is increased by the amount of life you're missing
+			'Destined to burn out'
+			'''
+	}
+
+	LifeJuice: {
+		DisplayName: Life Juice
+		Tooltip: "'Tastes like apples'"
+	}
+
+	MagmaBell: {
+		Tooltip:
+			'''
+			Grants immunity to fire blocks and you cannot be set on fire
+			Once per 7 seconds, blocks a hit that would have dealt no more than 35 damage
+			'Crafted to ward against the intense heat of the Underworld'
+			'''
+		DisplayName: Magma Bell
+	}
+
+	ArrowTalisman: {
+		DisplayName: Arrow Talisman
+		Tooltip:
+			'''
+			Your arrows have 20% increased damage and don't stray from their path
+			'Reeks of skill'
+			'''
+	}
+
+	LanceTalisman: {
+		DisplayName: Lance Talisman
+		Tooltip:
+			'''
+			When mounted, you gain: +50 max life, +5 defense, +10% increased damage
+			'Please, just don't use the damn lance...'
+			'''
+	}
 }
 
 Buffs: {
@@ -1620,6 +1664,7 @@ Projectiles: {
 	KokusenImpactVFX.DisplayName: Kokusen Impact V F X
 	StalwartAura.DisplayName: Stalwart Aura
 	DragonAura.DisplayName: Dragon Aura
+	MagmaShield.DisplayName: Magma Shield
 }
 
 Keybinds: {

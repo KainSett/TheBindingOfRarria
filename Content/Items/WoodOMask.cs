@@ -7,7 +7,7 @@ using TheBindingOfRarria.Content.Projectiles;
 
 namespace TheBindingOfRarria.Content.Items;
 
-public class WoodOMask : ModItem
+/*public class WoodOMask : ModItem
 {
     public override string Texture => ContentPath + "Items/" + Name;
 
@@ -67,4 +67,4 @@ public class PoisonMinionsPlayer : ModPlayer
 
         orig(self, type, time, quiet);
     }
-}
+}*/
