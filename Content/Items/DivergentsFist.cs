@@ -98,7 +98,7 @@ public class YujiItemPlayer : ModPlayer
 
                         bolt.AnchorPoint = target.Center;
                         bolt.EndOffset = target.Center.DirectionTo(Player.Center).RotatedBy(Main.rand.NextFloat() * PiOver2 - PiOver4) * 10;
-                        bolt.StartOffset = bolt.EndOffset + Vector2.Normalize(bolt.EndOffset) * Main.rand.NextFloat(10, 100);
+                        bolt.StartOffset = bolt.EndOffset + Vector2.Normalize(bolt.EndOffset) * Main.rand.NextFloat(60, 160);
                         //proj.ai[1] = Main.rand.Next(0, 2); //used to randomize drawing the red bit or not
                     }
                 }
@@ -204,7 +204,7 @@ public class KokusenImpactVFX : ModProjectile
 
         if (!CreatedPositions)
         {
-            positions = CreatePoints(StartOffset + AnchorPoint, EndOffset + AnchorPoint, 60f, 1.8f);
+            positions = CreatePoints(StartOffset + AnchorPoint, EndOffset + AnchorPoint, 60f, 1.4f);
             CreatedPositions = true;
             Projectile.netUpdate = true;
         }

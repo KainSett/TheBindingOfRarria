@@ -8,12 +8,12 @@ public static partial class Helper
     public static bool OwnsProjectile(this Player player, int type) =>
         player.ownedProjectileCounts[type] > 0;
 
-    public static void SpawnProjectileIfNotSpawned(this Player player, int type, IEntitySource source, Vector2 position)
+    public static void SpawnProjectileIfNotSpawned(this Player player, int type, IEntitySource source, Vector2 position, int damage = 0)
     {
         Projectile proj = null;
 
         if (!player.OwnsProjectile(type) && Main.myPlayer == player.whoAmI)
-            Projectile.NewProjectile(source, position, Vector2.Zero, type, 0, 0, player.whoAmI);
+            Projectile.NewProjectile(source, position, Vector2.Zero, type, damage, 0, player.whoAmI);
 
         else
             proj = Main.ActiveProjectiles.Find(proj => proj.type == type && proj.active && proj.owner == player.whoAmI);
@@ -25,12 +25,12 @@ public static partial class Helper
         }
     }
 
-    public static void SpawnProjectileIfNotSpawned(this Player player, int type, IEntitySource source)
+    public static void SpawnProjectileIfNotSpawned(this Player player, int type, IEntitySource source, int damage = 0)
     {
         Projectile proj = null;
 
         if (!player.OwnsProjectile(type) && Main.myPlayer == player.whoAmI)
-            Projectile.NewProjectile(source, player.Center, Vector2.Zero, type, 0, 0, player.whoAmI);
+            Projectile.NewProjectile(source, player.Center, Vector2.Zero, type, damage, 0, player.whoAmI);
 
         else if (player.OwnsProjectile(type))
             proj = Main.ActiveProjectiles.Find(proj => proj.type == type && proj.active && proj.owner == player.whoAmI);
@@ -42,12 +42,12 @@ public static partial class Helper
         }
     }
 
-    public static void SpawnProjectileIfNotSpawned(this Player player, int type, Vector2 position, IEntitySource source)
+    public static void SpawnProjectileIfNotSpawned(this Player player, int type, Vector2 position, IEntitySource source, int damage = 0)
     {
         Projectile proj = null;
 
         if (!player.OwnsProjectile(type) && Main.myPlayer == player.whoAmI)
-            Projectile.NewProjectile(source, position, Vector2.Zero, type, 0, 0, player.whoAmI);
+            Projectile.NewProjectile(source, position, Vector2.Zero, type, damage, 0, player.whoAmI);
 
         else
             proj = Main.ActiveProjectiles.Find(proj => proj.type == type && proj.active && proj.owner == player.whoAmI);

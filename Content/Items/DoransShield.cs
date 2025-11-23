@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using TheBindingOfRarria.Common.Helpers;
+using TheBindingOfRarria.Content.ArtifactSets;
 using TheBindingOfRarria.Content.Buffs;
 
 namespace TheBindingOfRarria.Content.Items;
@@ -50,7 +51,7 @@ public class TankStartPlayer : ModPlayer
     {
         if (Player.HasBuff(ModContent.BuffType<SecondBreath>()))
         {
-            Player.lifeRegenTime += 3;
+            Player.lifeRegenTime += Player.GetModPlayer<NaturesBlessingPlayer>().NaturesBlessing ? 9 : 3;
         }
     }
 

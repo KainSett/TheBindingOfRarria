@@ -1302,6 +1302,7 @@ Items: {
 			All lifesteal recovers faster
 			'Rip and tear'
 			'''
+		HealPot: Grants {0}% vampirism for 8 seconds
 	}
 
 	CurveSickle: {
@@ -1504,6 +1505,30 @@ Items: {
 			'Please, just don't use the damn lance...'
 			'''
 	}
+
+	ReaperTalisman: {
+		DisplayName: Reaper Talisman
+		Tooltip:
+			'''
+			Attacks against enemies who are below 50% life gain 6 armor penetration and lifesteal
+			'Let the harvest begin'
+			'''
+	}
+
+	EldritchHunger: {
+		DisplayName: Eldritch Hunger
+		Tooltip: ""
+	}
+
+	WintersBane: {
+		DisplayName: Winter's Bane
+		Tooltip:
+			'''
+			+50 max mana
+			Grants {0} [c/82caff:(20% of your max mana)] increased max life
+			'The winter is approaching? It better be ready for this one'
+			'''
+	}
 }
 
 Buffs: {
@@ -1665,6 +1690,7 @@ Projectiles: {
 	StalwartAura.DisplayName: Stalwart Aura
 	DragonAura.DisplayName: Dragon Aura
 	MagmaShield.DisplayName: Magma Shield
+	BlackHoleAura.DisplayName: Black Hole Aura
 }
 
 Keybinds: {
@@ -1744,12 +1770,6 @@ ArtifactSets: {
 		Additional: Reduces life regeneration by half of the intended amount
 	}
 
-	Cryonics: {
-		Name: Cryonics
-		Effect: Frozen Turtle Shell's effect isf also active while underwater
-		Additional: Also activates Frozen Shell's effect
-	}
-
 	Doctrine: {
 		Name: Doctrine
 		Effect: Multibinder's effect heals for 150% of the original amount
@@ -1764,7 +1784,7 @@ ArtifactSets: {
 
 	Execution: {
 		Name: Execution
-		Effect: First hit against an enemy has an 8% chance to instakill it
+		Effect: First hit against a regular enemy has an 8% chance to instakill it
 	}
 
 	HealingFactor: {
@@ -1781,14 +1801,14 @@ ArtifactSets: {
 
 	NaturesBlessing: {
 		Name: Nature's Blessing
-		Effect: Natural life regeneration cannot be reduced while under Doran's Shield's effect
-		Additional: Natural life regeneration cannot be reduced while under this effect
+		Effect: Doran's Shield's effect is tripled
+		Additional: The effect is tripled
 	}
 
 	Kokusen: {
 		Name: Kokusen
 		Effect: Divergent's Fist's effect has a 10% chance to occur critically, resulting in a Black Flash
-		Additional: Has a 10& chance to cause a Black Flash instead
+		Additional: Has a 10% chance to cause a Black Flash instead
 	}
 }
 

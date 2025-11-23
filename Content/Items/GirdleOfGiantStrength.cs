@@ -50,6 +50,8 @@ public class GiantItemNPCShop : GlobalNPC
 
 public class GiantPlayer : ModPlayer
 {
+    public static string StatSource = "Girdle";
+
     public bool HasGirdleOfGiantStrength = false;
 
     public bool Healed = false;
@@ -74,7 +76,7 @@ public class GiantPlayer : ModPlayer
             if (bonus > 0)
             {
                 self.statLifeMax2 += bonus;
-                self.GetModPlayer<TemporaryLifePlayer>().bonuses.Add(new LifeBonus(bonus, 1200, cond => !CheckGiantStrength(self), "Girdle"));
+                self.GetModPlayer<TemporaryLifePlayer>().bonuses.Add(new LifeBonus(bonus, 1200, cond => !CheckGiantStrength(self), StatSource));
             }
         }
 
@@ -90,7 +92,7 @@ public class GiantPlayer : ModPlayer
             if (bonus > 0)
             {
                 self.statLifeMax2 += bonus;
-                self.GetModPlayer<TemporaryLifePlayer>().bonuses.Add(new LifeBonus(bonus, 1200, cond => !CheckGiantStrength(self), "Girdle"));
+                self.GetModPlayer<TemporaryLifePlayer>().bonuses.Add(new LifeBonus(bonus, 1200, cond => !CheckGiantStrength(self), StatSource));
             }
         }
 

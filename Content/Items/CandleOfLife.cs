@@ -36,7 +36,7 @@ public class CandlePlayer : ModPlayer
 {
     public bool candle = false;
 
-    public override void PreUpdateBuffs()
+    public override void PostUpdateMiscEffects()
     {
         if (candle)
         {
@@ -44,7 +44,7 @@ public class CandlePlayer : ModPlayer
         }
         candle = false;
     }
-
+    
     public override void NaturalLifeRegen(ref float regen)
     {
         Player.lifeRegenTime += 4f;

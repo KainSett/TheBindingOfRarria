@@ -35,24 +35,13 @@ public class NaturesBlessingPlayer : ModPlayer
 {
     public bool NaturesBlessing = false;
 
+    public override void ResetEffects()
+    {
+        NaturesBlessing = false;
+    }
+
     public override void Load()
     {
         ArtifactSetSystem.ArtifactSets.Add(new NaturesBlessing());
-    }
-
-    public float OldRegen = 0;
-
-    public override void NaturalLifeRegen(ref float regen)
-    {
-        if (NaturesBlessing && Player.HasBuff(ModContent.BuffType<SecondBreath>()))
-        {
-            regen = Math.Max(regen, OldRegen);
-
-            OldRegen = regen;
-        }
-        else OldRegen = 0;
-
-
-        NaturesBlessing = false;
     }
 }
