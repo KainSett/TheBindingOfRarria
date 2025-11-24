@@ -230,7 +230,7 @@ public class KokusenImpactVFX : ModProjectile
                 Projectile.scale = Projectile.Opacity;
             }
 
-            if (Time >= 6 && Time < 10)
+            if (Time >= 6 && Time < 10f)
             {
                 //scale out after a slight delay
                 float t = (Time - 6f) / 4f;
