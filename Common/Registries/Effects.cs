@@ -18,6 +18,8 @@ public static class Effects
 
     public static readonly Asset<Effect> Quantizer = LoadEffect("Quantizer");
 
+    public static readonly Asset<Effect> CullAndPixel = LoadEffect("CullAndPixel");
+
     private static Asset<Effect> LoadEffect(string EffectPath)
     {
         if (Main.dedServ)

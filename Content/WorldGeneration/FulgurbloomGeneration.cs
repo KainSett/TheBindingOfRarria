@@ -11,7 +11,7 @@ public class ElectroEarth : GlobalTile
 
     public override void RandomUpdate(int x, int y, int type)
     {
-        if (!Main.rand.NextBool(5000) || !NPC.downedBoss3)
+        if (!Main.rand.NextBool(7000))
             return;
 
         if (Main.maxTilesY / 4 > y && Main.tile[x, y].TileType == TileID.Grass && WorldGen.TileEmpty(x, y - 1))

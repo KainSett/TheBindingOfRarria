@@ -8,7 +8,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Kokusen : IArtifactSet
 {
-    public string Name => "Kokusen"; //could replace with autoloading using nameof(tuah)
+    public string Name => nameof(Kokusen);
 
     public Color NameColor => Color.DarkRed;
 

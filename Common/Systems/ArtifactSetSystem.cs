@@ -1,3 +1,4 @@
+using Daybreak.Common.Features.ItemSlots;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -6,8 +7,11 @@ using System.Linq;
 using Terraria.Localization;
 using Terraria.ModLoader.Default;
 using Terraria.UI;
+using TheBindingOfRarria.Common.Helpers;
+using TheBindingOfRarria.Common.Registries;
 using TheBindingOfRarria.Content.ArtifactSets;
 using TheBindingOfRarria.Content.Items;
+using TheBindingOfRarria.Content.Projectiles;
 
 namespace TheBindingOfRarria.Common.Systems;
 
@@ -18,6 +22,34 @@ public class ArtifactSetSystem : ModSystem
     public override void Unload()
     {
         ArtifactSets.Clear();
+    }
+
+    public override void Load()
+    {
+        On_ItemSlot.DrawItemIcon += On_ItemSlot_DrawItemIcon;
+    }
+
+    private float On_ItemSlot_DrawItemIcon(On_ItemSlot.orig_DrawItemIcon orig, Item item, int context, SpriteBatch spriteBatch, Vector2 screenPositionForItemCenter, float scale, float sizeLimit, Color environmentColor)
+    {
+        if (Main.LocalPlayer.TryGetModPlayer<ArtifactSetPlayer>(out var p) && p.Sets is not null && p.Sets.Count > 0 && p.Sets.All(s => s.Artifacts is not null && s.Artifacts.Count > 0) && p.Sets.Any(s => s.Contains(item.type) && s.Count >= s.Artifacts.Count) && p.Equipped.Contains(item.type))
+        {
+            var texture = Textures._light[2];
+            var color = environmentColor.MultiplyRGB(p.Sets.FirstOrDefault(s => s.Contains(item.type) && s.Count >= s.Artifacts.Count).NameColor) * 1.0f;
+            color.A = 0;
+            var rotation = Main.GlobalTimeWrappedHourly * 2 + item.type;
+            var Scale = 0.07f + 0.01f * float.Sin(Main.GlobalTimeWrappedHourly);
+            color *= 135 / 255f;
+
+            for (int i = 0; i < 1; i ++)
+                spriteBatch.Draw(texture.Value, screenPositionForItemCenter, null, color, rotation, texture.Size() / 2, Scale, SpriteEffects.None, 0);
+            
+            texture = Textures._light[1];
+            rotation = -Main.GlobalTimeWrappedHourly * 2 + item.type;
+            Scale = 0.07f;
+
+            spriteBatch.Draw(texture.Value, screenPositionForItemCenter, null, color, rotation, texture.Size() / 2, Scale, SpriteEffects.None, 0);
+        }
+        return orig(item, context, spriteBatch, screenPositionForItemCenter, scale, sizeLimit, environmentColor);
     }
 }
 

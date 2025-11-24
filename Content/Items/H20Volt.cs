@@ -12,6 +12,7 @@ using Terraria.ModLoader;
 using TheBindingOfRarria.Common.Helpers;
 using TheBindingOfRarria.Common.Registries;
 using TheBindingOfRarria.Content.Projectiles;
+using TheBindingOfRarria.Content.Tiles;
 
 namespace TheBindingOfRarria.Content.Items;
 
@@ -37,9 +38,10 @@ public class H20Volt : ModItem
     public override void AddRecipes()
     {
         CreateRecipe()
+            .AddIngredient(ItemID.Timer1Second)
             .AddIngredient(ModContent.ItemType<Fulgurbloom>(), 4)
-            .AddIngredient(ItemID.CopperBar, 2)
-            .AddTile(TileID.WorkBenches)
+            .AddIngredient(ModContent.ItemType<CopperWire>(), 10)
+            .AddTile(ModContent.TileType<TeslaStationTile>())
             .Register();
     }
 }
@@ -59,7 +61,7 @@ public class H2VPlayer : ModPlayer
             return;
 
 
-        counter = -60;
+        counter = -10;
         int count = 4;
 
         int[] npcs = Helper.GetTargetIndices(Player.Center, count, 350f);
@@ -76,10 +78,11 @@ public class H2VPlayer : ModPlayer
                 Vector2 start = Player.Center;
                 Vector2 end = npc.Center;
 
-                Helper.NewProjectileBetter(Player.GetSource_FromAI(), start, Vector2.Normalize(end - start) * 10f, ModContent.ProjectileType<LightningBolt>(), 7, 0f, Player.whoAmI, self =>
+                Helper.NewProjectileBetter(Player.GetSource_FromAI(), start, Vector2.Normalize(end - start) * 10f, ModContent.ProjectileType<LightningBolt>(), 10, 0f, Player.whoAmI, self =>
                 {
                     LightningBolt.SetPositions(start, end, self, npc.whoAmI);
                 });
+                counter += 1-(int)npc.Center.Distance(Player.Center) / 32;
             }
         }
     }

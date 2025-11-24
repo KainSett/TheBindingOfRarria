@@ -249,7 +249,7 @@ public class LightningBolt : ModProjectile
                 }
             }
         }, PixellationSystem.RenderType.Additive, PixellationSystem.RenderLayer.Projectiles);
-
+        
         return false;
     }
 }

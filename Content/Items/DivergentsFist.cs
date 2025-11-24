@@ -22,8 +22,8 @@ public class DivergentsFist : ModItem
     public override void SetDefaults()
     {
         Item.accessory = true;
-        Item.width = 26;
-        Item.height = 32;
+        Item.width = 34;
+        Item.height = 40;
         Item.rare = ItemRarityID.Pink;
         Item.value = Item.sellPrice(0, 3);
     }
@@ -84,34 +84,26 @@ public class YujiItemPlayer : ModPlayer
         {
             bool setActive = KokusenPlayer.Get(Player).SetActive;
 
-            if (setActive && Main.rand.Next(100) < 96)
+            if (setActive && Main.rand.Next(100) < 10)
             {
-                counter = 2;
+                counter = 60;
                 reducedDefense = Player.statDefense / 10;
 
                 if (Main.myPlayer == Player.whoAmI)
                 {
-                    ParticleManager.SpawnParticle<PixelatedAdditiveParticleHandler>(target.Center, Vector2.Zero, 20, new(0.7f, 0.8f, 0.85f, 0), Color.DarkRed, new(1, 1), ParticleTextureType.FadedGlowyBall, [0]);
-
-                    for (int i = 0; i < 12; i++)
-                    {
-                        Vector2 vel = Main.rand.NextVector2Circular(4, 4);
-
-                        ParticleManager.SpawnParticle<PixelatedAdditiveParticleHandler>(target.Center, vel * 3f, 2, new(0.25f, 0.1f, 2f, 0), Color.Crimson, new(3f + vel.Length() / 10f, 0.11f), ParticleTextureType.FadedGlowyBall, [0.96f]);
-                        ParticleManager.SpawnParticle<PixelatedAdditiveParticleHandler>(target.Center, vel, 35, new(0.27f, 0.18f, 1.85f, 0), Color.DarkRed, new(1 + vel.Length() / 10f, 0.1f), ParticleTextureType.FadedGlowyBall, [0.6f]);
-                    }
-
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < 9; i++)
                     {
                         var proj = Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, Vector2.Zero, ProjectileType<KokusenImpactVFX>(), 0, 0, Main.myPlayer);
                         var bolt = proj.ModProjectile as KokusenImpactVFX;
 
                         bolt.AnchorPoint = target.Center;
-                        bolt.EndOffset = Main.rand.NextVector2Circular(13f, 13f);
-                        bolt.StartOffset = bolt.EndOffset + Vector2.Normalize(bolt.EndOffset) * Main.rand.NextFloat(10, 100);
+                        bolt.EndOffset = target.Center.DirectionTo(Player.Center).RotatedBy(Main.rand.NextFloat() * PiOver2 - PiOver4) * 10;
+                        bolt.StartOffset = bolt.EndOffset + Vector2.Normalize(bolt.EndOffset) * Main.rand.NextFloat(60, 160);
                         //proj.ai[1] = Main.rand.Next(0, 2); //used to randomize drawing the red bit or not
                     }
                 }
+
+                target.SimpleStrikeNPC(hit.SourceDamage, hit.HitDirection);
             }
 
             else
@@ -145,7 +137,7 @@ public class KokusenImpactVFX : ModProjectile
         Projectile.width = Projectile.height = 20;
 
         Projectile.aiStyle = -1;
-        Projectile.timeLeft = 60;
+        Projectile.timeLeft = 120;
         Projectile.extraUpdates = 1;
         Projectile.DamageType = DamageClass.Default;
 
@@ -212,7 +204,7 @@ public class KokusenImpactVFX : ModProjectile
 
         if (!CreatedPositions)
         {
-            positions = CreatePoints(StartOffset + AnchorPoint, EndOffset + AnchorPoint, 20f, 1.8f);
+            positions = CreatePoints(StartOffset + AnchorPoint, EndOffset + AnchorPoint, 60f, 1.4f);
             CreatedPositions = true;
             Projectile.netUpdate = true;
         }
@@ -239,7 +231,7 @@ public class KokusenImpactVFX : ModProjectile
                 //Projectile.scale = Projectile.Opacity;
             }
 
-            if (Time == 10)
+            if (Time % 10 == 0)
                 CreatedPositions = false;
 
             if (Time > 10 && Time < 15)
@@ -251,7 +243,7 @@ public class KokusenImpactVFX : ModProjectile
                 //Projectile.scale = Projectile.Opacity;
             }
 
-            if (Time >= 15 && Time < 30)
+            if (Time >= 25 && Time < 40)
             {
                 //scale out slower
                 float t = (Time - 15f) / 15f;
@@ -260,7 +252,7 @@ public class KokusenImpactVFX : ModProjectile
                 //Projectile.scale = Projectile.Opacity;
             }
 
-            if (Time >= 30)
+            if (Time >= 50)
                 Projectile.Kill();
         }
     }
@@ -269,7 +261,7 @@ public class KokusenImpactVFX : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        PixellationSystem.QueuePixellationAction(() =>
+        PixellationSystem.QueuePixellationAction(() => 
         {
             Texture2D texture = Textures.Particles[0].Value;
 
@@ -286,8 +278,8 @@ public class KokusenImpactVFX : ModProjectile
                     Vector2 drawPos = Vector2.Lerp(start, end, lerp);
 
                     Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
-                        null, Color.Black * Projectile.Opacity * Projectile.scale * (0.15f + (Projectile.ai[1] / 2f)), 0f,
-                        texture.Size() / 2, Projectile.scale * 0.03f,
+                        null, Color.Red with { A = 0 } * Projectile.Opacity * Projectile.scale, 0f,
+                        texture.Size() / 2, Projectile.scale * 0.07f,
                         SpriteEffects.None
                     );
 
@@ -308,44 +300,45 @@ public class KokusenImpactVFX : ModProjectile
                 }
             }
 
-        }, PixellationSystem.RenderType.Additive, PixellationSystem.RenderLayer.Projectiles);
-
-        Texture2D texture = Textures.Particles[0].Value;
-
-        for (int i = 1; i < positions.Count; i++)
-        {
-            Vector2 start = positions[i - 1];
-            Vector2 end = positions[i];
-
-            float count = (end - start).Length() * 2f;
-
-            for (int j = 0; j < count; j++)
+            for (int i = 1; i < positions.Count; i++)
             {
-                float lerp = j / (float)count;
-                Vector2 drawPos = Vector2.Lerp(start, end, lerp);
+                Vector2 start = positions[i - 1];
+                Vector2 end = positions[i];
 
-                Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
-                    null, Color.Black * Projectile.Opacity * Projectile.scale * (0.85f + (Projectile.ai[1] / 2f)), 0f,
-                    texture.Size() / 2, Projectile.scale * 0.03f,
-                    SpriteEffects.None
-                );
+                float count = (end - start).Length() * 2f;
 
-                if (Projectile.ai[1] == 0)
+                for (int j = 0; j < count; j++)
                 {
+                    float lerp = j / (float)count;
+                    Vector2 drawPos = Vector2.Lerp(start, end, lerp);
+
                     Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
-                        null, Color.Lerp(Color.Red, Color.DarkRed, 0.37f) with { A = 0 } * Projectile.Opacity * Projectile.scale * 0.5f, 0f,
-                        texture.Size() / 2, Projectile.scale * 0.032f,
+                        null, Color.Black * Projectile.Opacity * Projectile.scale * (0.85f + (Projectile.ai[1] / 2f)), 0f,
+                        texture.Size() / 2, Projectile.scale * 0.015f,
                         SpriteEffects.None
                     );
 
-                    Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
-                      null, Color.Lerp(Color.DarkBlue, Color.DarkRed, 0.87f) with { A = 0 } * Projectile.Opacity * Projectile.scale * 1.5f, 0f,
-                      texture.Size() / 2, Projectile.scale * 0.021f,
-                      SpriteEffects.None
-                    );
+                    if (Projectile.ai[1] == 0)
+                    {
+                        Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
+                            null, Color.Lerp(Color.Black, Color.Black, 0.37f) with { A = 0 } * Projectile.Opacity * Projectile.scale * 0.5f, 0f,
+                            texture.Size() / 2, Projectile.scale * 0.032f,
+                            SpriteEffects.None
+                        );
+
+                        Main.EntitySpriteDraw(texture, (drawPos - Main.screenPosition),
+                          null, Color.Lerp(Color.Black, Color.Black, 0.87f) with { A = 0 } * Projectile.Opacity * Projectile.scale * 1.5f, 0f,
+                          texture.Size() / 2, Projectile.scale * 0.021f,
+                          SpriteEffects.None
+                        );
+                    }
                 }
             }
-        }
+
+            texture = Textures.Particles[0].Value;
+            
+        }, PixellationSystem.RenderType.AlphaBlend, PixellationSystem.RenderLayer.Projectiles);
+
 
         return false;
     }

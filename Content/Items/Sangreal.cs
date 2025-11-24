@@ -116,13 +116,6 @@ public class SangrealPlayer : ModPlayer
         Noble = false;
     }
 
-    public override void ModifyHurt(ref Player.HurtModifiers modifiers)
-    {
-        if (Noble)
-        {
-            modifiers.IncomingDamageMultiplier *= 1.1f;
-        }
-    }
 }
 
 public class SangrealDropNPC : GlobalNPC

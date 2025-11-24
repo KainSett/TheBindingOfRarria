@@ -494,8 +494,9 @@ Items: {
 		DisplayName: Doran's Shield
 		Tooltip:
 			'''
-			After taking a hit, your natural life regeneration rate is increased by 300% for 10 seconds
-			'A great choice if you're up against a ranged opponent'
+			After taking a hit, your natural life regeneration ramps up 300% faster for 10 seconds
+			Current natural life regeneration: {0} hp/s
+			'Express delivery of healing'
 			'''
 	}
 
@@ -512,8 +513,8 @@ Items: {
 		DisplayName: Divergent's Fist
 		Tooltip:
 			'''
-			Melee attacks briefly sacrifice {0} defense to deal {1} damage after a delay
-			'One step closer to hitting a Awakening'
+			Melee attacks briefly sacrifice {0} [c/949494:(10% of your defense)] defense to deal {1} [c/949494:(50% of your defense)] damage after a delay
+			'One step closer to the Awakening'
 			'''
 	}
 
@@ -685,7 +686,7 @@ Items: {
 		Tooltip:
 			'''
 			Grants tremendously increased life regeneration [c/90ee90:(5 hp/s)]
-			Your life cannot exceed {0} [c/90ee90:({1}% of your max life)], and attacks against you have 10% increased damage
+			Your life cannot exceed {0} [c/90ee90:({1}% of your max life)]
 			'The prized, oaky flavor of Sangreal is a noble privilege. Can you handle it?'
 			'''
 		DeathMessage: "{0} couldn't handle the power of noble alcohol"
@@ -896,13 +897,13 @@ Items: {
 			'''
 	}
 
-	RobotCarcass: {
-		DisplayName: Robot Carcass
+	RobotInternals: {
+		DisplayName: Robot Internals
 		Tooltip:
 			'''
 			Converts half of your life regeneration to defense
 			Every 0.5 hp/s is converted to 3 defense
-			'A remnant of some droid'
+			'The core of droids'
 			'''
 	}
 
@@ -1298,9 +1299,10 @@ Items: {
 		Tooltip:
 			'''
 			Healing potions grant lifesteal for 8 seconds instead of healing you
-			Lifesteal limit is higher
+			All lifesteal recovers faster
 			'Rip and tear'
 			'''
+		HealPot: Grants {0}% vampirism for 8 seconds
 	}
 
 	CurveSickle: {
@@ -1334,6 +1336,197 @@ Items: {
 			'''
 			All healing recieved is 20% more effective
 			'Survival is paramount'
+			'''
+	}
+
+	TeslaStation: {
+		DisplayName: Tesla Station
+		Tooltip:
+			'''
+			Used for special crafting
+			'Advanced technology, don't ask how you know'
+			'''
+	}
+
+	CopperWire: {
+		DisplayName: Copper Wire
+		Tooltip: "'Works even without insulation!'"
+	}
+
+	PlagueMask: {
+		DisplayName: Plague Mask
+		Tooltip:
+			'''
+			Nearby enemies lose 8 life per second
+			'Great for impersonating medieval doctors!'
+			'''
+	}
+
+	PaleGreaves: {
+		DisplayName: Pale Greaves
+		Tooltip:
+			'''
+			Enemies are more likely to target you
+			'Great for mixing up stuff!'
+			'''
+	}
+
+	PaleHelm: {
+		DisplayName: Pale Helm
+		Tooltip:
+			'''
+			Enemies are more likely to target you
+			'Not a crown, not a crown...'
+			'''
+		SetBonus:
+			'''
+			Increases length of invincibility proportionally to the time passed since last hit taken
+			Up to 1 additional second of invincibility for 30 seconds
+			'''
+	}
+
+	PalePlatemail: {
+		DisplayName: Pale Platemail
+		Tooltip:
+			'''
+			Enemies are more likely to target you
+			'Weirdly big for its toughness'
+			'''
+	}
+
+	RampartGolemChestplate: {
+		DisplayName: Rampart Golem Chestplate
+		Tooltip:
+			'''
+			10% increased damage and critical strike chance
+			'Pray that you won't get to meet its actual owner'
+			'''
+	}
+
+	RampartGolemHelm: {
+		DisplayName: Rampart Golem Helm
+		Tooltip:
+			'''
+			15% increased damage and critical strike chance
+			'Balanced to be endlessly still'
+			'''
+		SetBonus:
+			'''
+			Every incoming attack is frozen and is applied to you instead of the next one
+			The frozen hit loses potency over time
+			'''
+	}
+
+	DragonFire: {
+		DisplayName: Dragon Fire
+		Tooltip:
+			'''
+			+2 sentry slots
+			Your sentries gain fire aura that pulses every second
+			'Fitting, for a part of The Dragonmother'
+			'''
+	}
+
+	BloodBucket: {
+		DisplayName: Blood Bucket
+		Tooltip: "'Not for consumption'"
+	}
+
+	HealthStone: {
+		DisplayName: Health Stone
+		Tooltip:
+			'''
+			Duration of all buffs on you is increased by 20%
+			Whenever a new buff is applied to you, drop a healing heart
+			Cannot drop a heart more than once every 10 seconds
+			'One can never have "enough" health'
+			'''
+	}
+
+	WarFlame: {
+		DisplayName: War Flame
+		Tooltip:
+			'''
+			Every time a fire-based debuff is applied to an enemy near you, half of the duration added is instantly expended as direct damage
+			'Ceaseless burning'
+			'''
+	}
+
+	MortalWard: {
+		DisplayName: Mortal Ward
+		Tooltip:
+			'''
+			When falling below {0} [c/90ee90:(33% of your max life)] life, become immune to all status effects and unable to gain or lose life for 5 seconds
+			This ability only recharges when your life is full again
+			'A frightening thing to carry around, this one is'
+			'''
+	}
+
+	CandleOfLife: {
+		DisplayName: Candle of Life
+		Tooltip:
+			'''
+			Grants increased life regeneration [c/90ee90:(2 hp/s)]
+			Natural life regeneration ramps up 400% faster
+			Your max life is increased by the amount of life you're missing
+			'Destined to burn out'
+			'''
+	}
+
+	LifeJuice: {
+		DisplayName: Life Juice
+		Tooltip: "'Tastes like apples'"
+	}
+
+	MagmaBell: {
+		Tooltip:
+			'''
+			Grants immunity to fire blocks and you cannot be set on fire
+			Once per 7 seconds, blocks a hit that would have dealt no more than 35 damage
+			'Crafted to ward against the intense heat of the Underworld'
+			'''
+		DisplayName: Magma Bell
+	}
+
+	ArrowTalisman: {
+		DisplayName: Arrow Talisman
+		Tooltip:
+			'''
+			Your arrows have 20% increased damage and don't stray from their path
+			'Reeks of skill'
+			'''
+	}
+
+	LanceTalisman: {
+		DisplayName: Lance Talisman
+		Tooltip:
+			'''
+			When mounted, you gain: +50 max life, +5 defense, +10% increased damage
+			'Please, just don't use the damn lance...'
+			'''
+	}
+
+	ReaperTalisman: {
+		DisplayName: Reaper Talisman
+		Tooltip:
+			'''
+			Attacks against enemies who are below 50% life gain 6 armor penetration and lifesteal
+			'Let the harvest begin'
+			'''
+	}
+
+	EldritchHunger: {
+		DisplayName: Eldritch Hunger
+		Tooltip: ""
+	}
+
+	WintersBane: {
+		DisplayName: Winter's Bane
+		Tooltip:
+			'''
+			+50 max mana
+			Grants {0} [c/82caff:(20% of your max mana)] increased max life
+			'The winter is approaching? It better be ready for this one'
 			'''
 	}
 }
@@ -1425,7 +1618,7 @@ Buffs: {
 
 	SecondBreath: {
 		DisplayName: Second Breath
-		Description: +300% natural regeneration rate
+		Description: +300% natural regeneration ramp up speed
 	}
 
 	RustyBerserk: {
@@ -1436,6 +1629,11 @@ Buffs: {
 	SteelEndurance: {
 		DisplayName: Steel Endurance
 		Description: Increased endurance by 3% per stack
+	}
+
+	DeathsDoor: {
+		DisplayName: Death's Door
+		Description: Your life is static
 	}
 
 	NobleWine: {
@@ -1489,6 +1687,10 @@ Projectiles: {
 	RebelSwing.DisplayName: Rebel Swing
 	CurveSickleProj.DisplayName: Curve Sickle Proj
 	KokusenImpactVFX.DisplayName: Kokusen Impact V F X
+	StalwartAura.DisplayName: Stalwart Aura
+	DragonAura.DisplayName: Dragon Aura
+	MagmaShield.DisplayName: Magma Shield
+	BlackHoleAura.DisplayName: Black Hole Aura
 }
 
 Keybinds: {
@@ -1505,7 +1707,8 @@ Tiles: {
 	SihilStone.MapEntry: Sword in ice
 	MardroemeTile.MapEntry: Suspicious looking mushrooms
 	SuspiciousScaleTile.MapEntry: Suspicious looking scales
-	FulgurbloomTile.MapEntry: FulgurbloomTile
+	FulgurbloomTile.MapEntry: Fulgurbloom
+	TeslaStationTile.MapEntry: Tesla Station
 }
 
 WorldGen: {
@@ -1539,6 +1742,8 @@ NPCs: {
 		DisplayName: Rebel Knight
 		FlavorText: Unstoppable force that is only capable of endlessly swinging.
 	}
+
+	RedLeech.DisplayName: Red Leech
 }
 
 ArtifactSets: {
@@ -1561,14 +1766,8 @@ ArtifactSets: {
 
 	Android: {
 		Name: Android
-		Effect: Robot Carcass reduces life regeneration by half of the intended amount
+		Effect: Robot Internals reduce life regeneration by half of the intended amount
 		Additional: Reduces life regeneration by half of the intended amount
-	}
-
-	Cryonics: {
-		Name: Cryonics
-		Effect: Frozen Turtle Shell's effect isf also active while underwater
-		Additional: Also activates Frozen Shell's effect
 	}
 
 	Doctrine: {
@@ -1585,7 +1784,7 @@ ArtifactSets: {
 
 	Execution: {
 		Name: Execution
-		Effect: First hit against an enemy has an 8% chance to instakill it
+		Effect: First hit against a regular enemy has an 8% chance to instakill it
 	}
 
 	HealingFactor: {
@@ -1602,7 +1801,15 @@ ArtifactSets: {
 
 	NaturesBlessing: {
 		Name: Nature's Blessing
-		Effect: Natural life regeneration cannot be reduced while under Doran's Shield's effect
-		Additional: Natural life regeneration cannot be reduced while under this effect
+		Effect: Doran's Shield's effect is tripled
+		Additional: The effect is tripled
+	}
+
+	Kokusen: {
+		Name: Kokusen
+		Effect: Divergent's Fist's effect has a 10% chance to occur critically, resulting in a Black Flash
+		Additional: Has a 10% chance to cause a Black Flash instead
 	}
 }
+
+Liquids.BloodLiquid.MapEntry: Blood

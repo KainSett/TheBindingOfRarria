@@ -40,16 +40,18 @@ public class TheLastFinger : ModItem
 
             foreach (var target in Main.ActiveNPCs)
             {
-                if (!target.friendly && target.lifeMax > 5 && target.CanBeChasedBy() && !target.immortal && !target.CountsAsACritter && !target.immortal)
+                var dist = target.Center.DistanceSQ(player.Center);
+                if (distance > dist && !target.friendly && target.lifeMax > 5 && target.CanBeChasedBy() && !target.immortal && !target.CountsAsACritter)
                 {
-                    distance = target.Center.DistanceSQ(player.Center);
+                    distance = dist;
                     position = target.Center;
                 }
             }
 
             if (position != Vector2.Zero)
             {
-                counter = 40;
+                counter = 10;
+                counter += (int)player.Center.Distance(position) / 32 - 6;
                 Vector2 velocity = new Vector2(11f, 11f).RotatedByRandom(TwoPi);
                 Projectile.NewProjectile(player.GetSource_Accessory(Item, "Thukuna accessory"), position - velocity * 9, velocity, ProjectileID.Muramasa, 30, 1, player.whoAmI, 0, 0, 0);
             }

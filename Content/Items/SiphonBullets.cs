@@ -69,6 +69,8 @@ public class PlanteraLootNPC : GlobalNPC
 
 public class SiphonPlayer : ModPlayer
 {
+    public static string StatSource = "Siphon";
+
     public bool VenusTrap = false;
     public int duration = 0;
     public int power = 1;
@@ -88,7 +90,7 @@ public class SiphonPlayer : ModPlayer
         if (counter <= 0 && VenusTrap && BulletGlobalProjectile.Bullet.Contains(proj.type) && target.lifeMax > 5 && !target.immortal)
         {
             duration = target.active ? 600 : 1800;
-            Player.GetModPlayer<TemporaryLifePlayer>().bonuses.Add(new LifeBonus(power, duration, p => !p.GetModPlayer<SiphonPlayer>().VenusTrap || p.GetModPlayer<SiphonPlayer>().duration <= 0, "Siphon"));
+            Player.GetModPlayer<TemporaryLifePlayer>().bonuses.Add(new LifeBonus(power, duration, p => !p.GetModPlayer<SiphonPlayer>().VenusTrap || p.GetModPlayer<SiphonPlayer>().duration <= 0, StatSource));
             
             if (target.active)
                 target.AddBuff(ModContent.BuffType<Siphoned>(), duration);

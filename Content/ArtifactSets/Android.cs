@@ -9,14 +9,14 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Android : IArtifactSet
 {
-    public string Name => "Android";
+    public string Name => nameof(Android);
 
     public Color NameColor => Color.LightSlateGray;
 
     public List<int> Items => 
         [ItemID.MechanicalGlove,
         ItemType<H20Volt>(),
-        ItemType<RobotCarcass>()];
+        ItemType<RobotInternals>()];
 
     public List<Predicate<int>> Artifacts { get; set; }
 

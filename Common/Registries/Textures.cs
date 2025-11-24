@@ -24,8 +24,16 @@ public static class Textures
 
     public static readonly Asset<Texture2D> TrailTexture2 = LoadTexture2D("TrailTexture2");
 
+    public static readonly Asset<Texture2D> ElectricLink = LoadTexture2D("ElectricLink");
+
+    public static readonly Asset<Texture2D> LightBall = LoadTexture2D("LightBall");
+
+    public static readonly Asset<Texture2D> LightBeams = LoadTexture2D("LightBeams");
+
 
     private static readonly Lazy<Asset<Texture2D>[]> _particle = new(() => LoadTexture2Ds("Particles/Particle", 2));
+
+    public static readonly Asset<Texture2D>[] _light = LoadTexture2Ds("light", 3);
     public static Asset<Texture2D>[] Particles => _particle.Value;
 
     private static Asset<Texture2D> LoadTexture2D(string TexturePath)

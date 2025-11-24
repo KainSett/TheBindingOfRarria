@@ -8,7 +8,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class HealingFactor : IArtifactSet
 {
-    public string Name => "HealingFactor";
+    public string Name => nameof(HealingFactor);
 
     public Color NameColor => Color.LightGreen;
 

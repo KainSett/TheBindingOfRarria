@@ -5,10 +5,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using TheBindingOfRarria.Common.Helpers;
 using TheBindingOfRarria.Content.ArtifactSets;
+using TheBindingOfRarria.Content.Tiles;
 
 namespace TheBindingOfRarria.Content.Items;
 
-public class RobotCarcass : ModItem
+public class RobotInternals : ModItem
 {
     public override string Texture => ContentPath + "Items/" + Name;
 
@@ -30,25 +31,18 @@ public class RobotCarcass : ModItem
     {
         tooltips.InsertArtifactSetBonusTooltip(Type);
     }
-}
 
-public class RobotItemShop : GlobalNPC
-{
-    public override void ModifyActiveShop(NPC npc, string shopName, Item[] items)
+    public override void AddRecipes()
     {
-        if (npc.type == NPCID.Merchant && NPC.downedMechBossAny)
-        {
-            var index = Array.FindLastIndex(items, i => i is not null && (i.expert || i.type == ItemID.IronAnvil || i.type == ItemID.LeadAnvil));
-            if (index == -1)
-                return;
-
-            for (int i = items.Length - 1; i > index; i--)
-            {
-                items[i] = items[i - 1];
-            }
-
-            items[index + 1] = new Item(ModContent.ItemType<RobotCarcass>());
-        }
+        CreateRecipe()
+            .AddIngredient(ItemID.Timer1Second)
+            .AddIngredient(ItemID.SoulofMight, 10)
+            .AddIngredient(ModContent.ItemType<Fulgurbloom>(), 6)
+            .AddIngredient(ItemID.IronBar, 10)
+            .AddIngredient(ModContent.ItemType<CopperWire>(), 10)
+            .AddIngredient(ItemID.WirePipe, 2)
+            .AddTile(ModContent.TileType<TeslaStationTile>())
+            .Register();
     }
 }
 

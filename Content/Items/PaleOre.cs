@@ -13,8 +13,8 @@ public class PaleOre : ModItem
     public override void SetDefaults()
     {
         Item.DefaultToPlaceableTile(ModContent.TileType<PaleOreTile>());
-        Item.width = 30;
-        Item.height = 26;
+        Item.width = 36;
+        Item.height = 34;
         Item.value = Item.sellPrice(0, 0, 20);
         Item.rare = ItemRarityID.Green;
     }

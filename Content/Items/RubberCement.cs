@@ -16,7 +16,7 @@ public class RubberCement : ModItem
     public override void SetDefaults()
     {
         Item.accessory = true;
-        Item.height = 26;
+        Item.height = 32;
         Item.width = 24;
         Item.rare = ItemRarityID.LightRed;
         Item.value = Item.sellPrice(0, 1, 12);

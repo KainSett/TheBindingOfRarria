@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using Terraria.Localization;
 using TheBindingOfRarria.Common.Systems;
 using static TheBindingOfRarria.Content.Items.AegisPlayer;
 
@@ -83,5 +85,20 @@ public class BeastPlayer : ModPlayer
 
         Player.Heal(amount);
         Player.lifeSteal -= amount;
+    }
+}
+
+public class BeastPotion : GlobalItem
+{
+    public override bool InstancePerEntity => true;
+
+    public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+    {
+        var index = tooltips.FindIndex(t => t.Name == "HealLife");
+
+        if (index == -1 || !item.potion || !Main.LocalPlayer.GetModPlayer<BeastPlayer>().Beast)
+            return;
+
+        tooltips[index].Text = string.Format(Language.GetTextValue("Mods.TheBindingOfRarria.Items.BeastCrest.HealPot"), $"{(1f * (item.healLife / 150f) / 8f) * 100}");
     }
 }

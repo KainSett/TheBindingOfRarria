@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using TheBindingOfRarria.Common.Helpers;
+using TheBindingOfRarria.Content.ArtifactSets;
 using TheBindingOfRarria.Content.Buffs;
 
 namespace TheBindingOfRarria.Content.Items;
@@ -26,6 +27,16 @@ public class DoransShield : ModItem
 
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
+        var index = tooltips.FindIndex(t => t.Name.Contains("Tooltip1"));
+        if (index != -1)
+        {
+            var text = string.Format(Language.GetTextValue($"Mods.TheBindingOfRarria.Items.{Name}.Tooltip"), Main.LocalPlayer.GetModPlayer<DoranPlayer>().Regen);
+            text = text[(text.IndexOf("\n")+1)..];
+            text = text[..text.IndexOf("\n")];
+            tooltips[index].Text = text;
+            tooltips[index].OverrideColor = Color.Gray;
+        }
+
         tooltips.InsertArtifactSetBonusTooltip(Type);
     }
 }
@@ -40,7 +51,7 @@ public class TankStartPlayer : ModPlayer
     {
         if (Player.HasBuff(ModContent.BuffType<SecondBreath>()))
         {
-            Player.lifeRegenTime += 3;
+            Player.lifeRegenTime += Player.GetModPlayer<NaturesBlessingPlayer>().NaturesBlessing ? 9 : 3;
         }
     }
 
@@ -50,6 +61,16 @@ public class TankStartPlayer : ModPlayer
         {
             Player.AddBuff(ModContent.BuffType<SecondBreath>(), 600);
         }
+    }
+}
+
+public class DoranPlayer : ModPlayer
+{
+    public float Regen = 0;
+
+    public override void NaturalLifeRegen(ref float regen)
+    {
+        Regen = regen / 2;
     }
 }
 

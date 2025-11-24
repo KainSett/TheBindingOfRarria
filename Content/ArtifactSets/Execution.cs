@@ -8,7 +8,7 @@ namespace TheBindingOfRarria.Content.ArtifactSets;
 
 public class Execution : IArtifactSet
 {
-    public string Name => "Execution";
+    public string Name => nameof(Execution);
 
     public Color NameColor => Color.IndianRed;
 
@@ -46,7 +46,7 @@ public class ExecutionPlayer : ModPlayer
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
     {
-        if (execution && target.life == target.lifeMax && Main.rand.NextFloat() < 0.08f)
+        if (execution && !target.boss && target.life == target.lifeMax && Main.rand.NextFloat() < 0.08f)
         {
             modifiers.SetInstantKill();
         }
