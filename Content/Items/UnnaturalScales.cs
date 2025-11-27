@@ -39,10 +39,6 @@ public class UnnaturalScales : ModItem
         }
     }
 
-    public override void UpdateEquip(Player player)
-    {
-    }
-
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         player.GetModPlayer<RekSaiArmorPlayer>().Equipped = true;
@@ -80,6 +76,9 @@ public class RekSaiArmorPlayer : ModPlayer
             drawInfo.colorBodySkin = Color.Transparent;
             drawInfo.hidesBottomSkin = true;
             drawInfo.hidesTopSkin = true;
+            drawInfo.armorHidesArms = true;
+            drawInfo.colorHead = Color.Transparent;
+            drawInfo.drawsBackHairWithoutHeadgear = false;
             drawInfo.drawPlayer.face = -1;
             drawInfo.legsOffset += new Vector2(-6, 0) * drawInfo.drawPlayer.direction;
         } 
