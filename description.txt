@@ -22,7 +22,7 @@ Silksong
 The total planned size of the mod is about ~90 items, and a few small changes and additions, like NPCs and status effects.
 
 The current version includes:
-* 106 accessories
+* 100+ accessories
 * 19 status effects
 * 7 armor set
 * 6 unique weapons

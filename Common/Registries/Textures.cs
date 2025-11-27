@@ -30,6 +30,8 @@ public static class Textures
 
     public static readonly Asset<Texture2D> LightBeams = LoadTexture2D("LightBeams");
 
+    public static readonly Asset<Texture2D>[] Muzzle = LoadTexture2Ds("muzzle", 3);
+
 
     private static readonly Lazy<Asset<Texture2D>[]> _particle = new(() => LoadTexture2Ds("Particles/Particle", 2));
 

@@ -38,8 +38,26 @@ public class SpiritKnuckle : ModItem
 
 public partial class SoulPlayer : ModPlayer
 {
-    public static void OnHitWithKnuckle(ref NPC target)
+    public int defense = 0;
+    public int counter = 0;
+
+    public override void PostUpdateEquips()
     {
-        target.StrikeNPC(target.CalculateHitInfo(40, 1, damageType: DamageClass.Magic));
+        if (defense != 0)
+            return;
+
+        Player.statDefense += defense;
+
+        counter = Math.Max(0, counter - 1);
+        if (counter == 0)
+            defense = 0;
+    }
+
+    public void OnHitWithKnuckle(ref NPC target)
+    {
+        var info = target.CalculateHitInfo(40, 1, damageType: DamageClass.Magic);
+        defense = Math.Max(defense, info.Damage / 10);
+        counter = 120;
+        target.StrikeNPC(info);
     }
 }

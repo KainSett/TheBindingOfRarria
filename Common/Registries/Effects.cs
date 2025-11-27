@@ -20,6 +20,8 @@ public static class Effects
 
     public static readonly Asset<Effect> CullAndPixel = LoadEffect("CullAndPixel");
 
+    public static readonly Asset<Effect> Outline = LoadEffect("Outline");
+
     private static Asset<Effect> LoadEffect(string EffectPath)
     {
         if (Main.dedServ)

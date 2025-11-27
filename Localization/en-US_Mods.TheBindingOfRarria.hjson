@@ -795,6 +795,7 @@ Items: {
 		Tooltip:
 			'''
 			Your melee swings deal additional magic damage and restore 15 mana on hit
+			You gain defense equal to 10% of the damage the additional hit dealt
 			'Don't mind the blood on that, it's been used very gently'
 			'''
 	}
@@ -1302,7 +1303,7 @@ Items: {
 			All lifesteal recovers faster
 			'Rip and tear'
 			'''
-		HealPot: Grants {0}% vampirism for 8 seconds
+		HealPot: Grants {0}% lifesteal for 8 seconds
 	}
 
 	CurveSickle: {
@@ -1529,6 +1530,26 @@ Items: {
 			'The winter is approaching? It better be ready for this one'
 			'''
 	}
+
+	BleedingPendant: {
+		DisplayName: Bleeding Pendant
+		Tooltip: ""
+	}
+
+	BloodcourseMedallion: {
+		DisplayName: Bloodcourse Medallion
+		Tooltip: ""
+	}
+
+	MicroPlanet: {
+		DisplayName: Micro Planet
+		Tooltip: ""
+	}
+
+	UnnaturalScales: {
+		DisplayName: Unnatural Scales
+		Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -1691,6 +1712,7 @@ Projectiles: {
 	DragonAura.DisplayName: Dragon Aura
 	MagmaShield.DisplayName: Magma Shield
 	BlackHoleAura.DisplayName: Black Hole Aura
+	OrbitalStar.DisplayName: Orbital Star
 }
 
 Keybinds: {
