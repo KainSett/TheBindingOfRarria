@@ -22,6 +22,8 @@ public static class Effects
 
     public static readonly Asset<Effect> Outline = LoadEffect("Outline");
 
+    public static readonly Asset<Effect> SobelDarken = LoadEffect("SobelDarken");
+
     private static Asset<Effect> LoadEffect(string EffectPath)
     {
         if (Main.dedServ)
