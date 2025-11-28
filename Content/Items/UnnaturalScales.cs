@@ -93,7 +93,6 @@ public class RekSaiArmorPlayer : ModPlayer
             drawInfo.drawsBackHairWithoutHeadgear = false;
             drawInfo.drawPlayer.face = -1;
             drawInfo.legsOffset += new Vector2(-6, 0) * drawInfo.drawPlayer.direction;
-            EcholocationSystem.Instance.ApplySobelDarkening(0.2f, 10, 10, 0.035f, 1.2f);
         } 
     }
 
@@ -227,9 +226,8 @@ public class EcholocationSystem : ModSystem
     public override void Load()
     {
         LoadFilters();
-        On_Main.DoDraw_WallsTilesNPCs += On_Main_DoDraw_WallsTilesNPCs;
-        On_Main.DrawProjectiles += On_Main_DrawProjectiles;
-        On_Main.DrawBackground += On_Main_DrawBackground;
+        On_Main.DrawBG += On_Main_DrawBG;
+        On_Main.DrawInfernoRings += On_Main_DrawInfernoRings;
         if (!Main.dedServ)
         {
             Main.OnResolutionChanged += InitializeRT;
@@ -260,99 +258,21 @@ public class EcholocationSystem : ModSystem
 
     private static RenderTarget2D Target { get; set; }
 
-    private void On_Main_DrawBackground(On_Main.orig_DrawBackground orig, Main self)
+    private void On_Main_DrawBG(On_Main.orig_DrawBG orig, Main self)
     {
-        if (!Main.LocalPlayer.GetModPlayer<RekSaiArmorPlayer>().Echo)
-        {
+        if (Main.LocalPlayer?.TryGetModPlayer<RekSaiArmorPlayer>(out var p) != true || (p.Echo != true))
             orig(self);
-        }
     }
 
-    private void On_Main_DrawProjectiles(On_Main.orig_DrawProjectiles orig, Main self)
+    private void On_Main_DrawInfernoRings(On_Main.orig_DrawInfernoRings orig, Main self)
     {
+        orig(self);
+
         if (Main.LocalPlayer.GetModPlayer<RekSaiArmorPlayer>().Echo)
         {
-            var effect = Effects.SobelDarken;
-
-            if (effect == null || effect.Value == null)
-                return;
-
-            var gd = Main.graphics.GraphicsDevice;
-
-            if (gd.PresentationParameters.RenderTargetUsage != RenderTargetUsage.PreserveContents)
-            {
-                gd.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
-            }
-
-            if (SobelSettings.Power + 0.0005f >= SobelSettings.PowerTarget)
-                Lighting.AddLight(Main.LocalPlayer.Center, new Vector3(1) * 30);
-
-            gd.SetRenderTarget(Target);
-            gd.Clear(Color.Transparent);
-
-            orig(self);
-
-            Helper.SpritebatchParameters parameters = new();
-            var beginned = Main.spriteBatch.beginCalled;
-
-            if (beginned)
-                Main.spriteBatch.End(out parameters);
-
-            EcholocationSystem.Instance.ApplySobelDarkening(0.2f, 10, 10, 0.035f, 1.2f);
-
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, Main.Rasterizer, effect.Value);
-
-            Main.spriteBatch.Draw(Target, new Vector2(0, 0), Color.White);
-
-
-            Main.spriteBatch.End();
-            if (beginned)
-                Main.spriteBatch.Begin(parameters);
+            Instance.SobelSettings.Power -= 0.02f * float.Sin(3 * Main.GlobalTimeWrappedHourly);
+            Lighting.AddLight(Main.LocalPlayer.Center, new Vector3(1) * 30 * Instance.SobelSettings.Power / Instance.SobelSettings.PowerTarget);
+            EcholocationSystem.Instance.ApplySobelDarkening(0.3f, 10, 10, 0.075f, 1.2f + 0.2f * float.Sin(3 * Main.GlobalTimeWrappedHourly));
         }
-        else orig(self);
-    }
-
-    private void On_Main_DoDraw_WallsTilesNPCs(On_Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
-    {
-        if (!Main.LocalPlayer.GetModPlayer<RekSaiArmorPlayer>().Echo)
-        {
-            var effect = Effects.SobelDarken;
-
-            if (effect == null || effect.Value == null)
-                return;
-
-            var gd = Main.graphics.GraphicsDevice;
-
-            if (gd.PresentationParameters.RenderTargetUsage != RenderTargetUsage.PreserveContents)
-            {
-                gd.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
-            }
-
-            if (SobelSettings.Power == SobelSettings.PowerTarget)
-                Lighting.AddLight(Main.LocalPlayer.Center, new Vector3(1) * 30);
-
-            gd.SetRenderTarget(Target);
-            gd.Clear(Color.Transparent);
-
-            orig(self);
-
-            Helper.SpritebatchParameters parameters = new();
-            var beginned = Main.spriteBatch.beginCalled;
-
-            if (beginned)
-                Main.spriteBatch.End(out parameters);
-
-            EcholocationSystem.Instance.ApplySobelDarkening(0.2f, 10, 10, 0.035f, 1.2f);
-
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, Main.Rasterizer, effect.Value);
-
-            Main.spriteBatch.Draw(Target, new Vector2(0, 0), Color.White);
-
-
-            Main.spriteBatch.End();
-            if (beginned)
-                Main.spriteBatch.Begin(parameters);
-        }
-        else orig(self);
     }
 }
