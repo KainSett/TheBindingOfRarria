@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Terraria.ID;
 using TheBindingOfRarria.Common.Helpers;
+using TheBindingOfRarria.Common.Systems;
 
 namespace TheBindingOfRarria.Content.Projectiles;
 
@@ -74,10 +75,14 @@ public class HomingMissile : ModProjectile
 
         Color color = lightColor;
 
-        for (int i = 0; i < Projectile.oldPos.Length - 1; i++)
-            Main.spriteBatch.DrawPixellated(texture, Projectile.oldPos[i] - Main.screenPosition + Projectile.Size / 2, null, Projectile.scale - 0.02f * i, Projectile.oldRot[i], texture.Size() / 2, color with { A = (byte)(150 - i * 5)}, Common.Systems.PixellationSystem.RenderType.Additive, Common.Systems.PixellationSystem.RenderLayer.Projectiles);
+        PixellationSystem.QueuePixellationAction(() =>
+        {
+            for (int i = 0; i < Projectile.oldPos.Length - 1; i++)
+                Main.spriteBatch.Draw(texture, Projectile.oldPos[i] - Main.screenPosition + Projectile.Size / 2, null, color with { A = (byte)(150 - i * 5) }, Projectile.oldRot[i], texture.Size() / 2, Projectile.scale - 0.02f * i, SpriteEffects.None, 0);
 
-        Main.spriteBatch.DrawPixellated(texture, Projectile.Center - Main.screenPosition, null, Projectile.scale * 1.5f, Projectile.rotation, texture.Size() / 2, color with { A = 150 }, Common.Systems.PixellationSystem.RenderType.Additive, Common.Systems.PixellationSystem.RenderLayer.Projectiles);
+            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color with { A = 150 }, Projectile.rotation, texture.Size() / 2, Projectile.scale * 1.5f, SpriteEffects.None, 0);
+        }, PixellationSystem.RenderType.Additive, PixellationSystem.RenderLayer.Projectiles);
+        
         return false;
     }
 }

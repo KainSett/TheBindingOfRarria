@@ -19,6 +19,7 @@ public class OrbitalStar : ModProjectile
         Projectile.tileCollide = false;
         Projectile.penetrate = -1;
         Projectile.ignoreWater = true;
+        Projectile.DamageType = DamageClass.Magic;
         Projectile.width = 32;
         Projectile.height = 32;
     }

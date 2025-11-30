@@ -1,13 +1,19 @@
 
+using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System.Linq;
+using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
+using Terraria.Localization;
 using Terraria.WorldBuilding;
 using TheBindingOfRarria.Common.Helpers;
 using TheBindingOfRarria.Common.Registries;
+using TheBindingOfRarria.Common.Systems;
 
 namespace TheBindingOfRarria.Content.Items;
 
-public class UnnaturalScales : ModItem
+/*public class UnnaturalScales : ModItem
 {
     public override string Texture => ContentPath + "Items/" + Name;
 
@@ -32,6 +38,7 @@ public class UnnaturalScales : ModItem
         Item.value = Item.sellPrice(0, 1);
         Item.rare = ItemRarityID.Expert;
         Item.expert = true;
+        Item.lifeRegen = 4;
 
         if (Main.netMode != NetmodeID.Server)
         {
@@ -56,11 +63,50 @@ public class UnnaturalScales : ModItem
 
         if (!hideVisual)
             player.GetModPlayer<RekSaiArmorPlayer>().Echo = true;
+
+
+
+        player.statLifeMax2 += 100;
+        player.statDefense += 34;
+        player.GetDamage(DamageClass.Generic) += 0.14f;
+        player.GetCritChance(DamageClass.Generic) += 14;
+        player.GetArmorPenetration(DamageClass.Generic) += 6;
+
+        if ((player.ZoneRockLayerHeight || player.ZoneDirtLayerHeight || player.ZoneUnderworldHeight) && player.pickSpeed <= 0.5f)
+        {
+            player.statLifeMax2 += 50;
+            player.statDefense += 17;
+            player.GetDamage(DamageClass.Generic) += 0.7f;
+            player.GetCritChance(DamageClass.Generic) += 7;
+            player.GetArmorPenetration(DamageClass.Generic) += 3;
+        }
     }
 
     public override void UpdateVanity(Player player)
     {
         player.GetModPlayer<RekSaiArmorPlayer>().Equipped = true;
+    }
+
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+
+        if (!tooltips.Any(t => t.Name.Contains("Social")))
+        {
+            var shift = Language.GetTextValue($"Mods.TheBindingOfRarria.Items.{Name}.Shift");
+            if (Main.keyState.IsKeyDown(Keys.LeftShift) || Main.keyState.IsKeyDown(Keys.RightShift))
+            {
+                int index = tooltips.FindIndex(t => t.Name == "Tooltip0");
+
+                if (index != -1)
+                    tooltips[index].Text = shift;
+
+                var tips = tooltips.FindAll(t => t.Name.Contains("Tooltip") && !t.Name.Contains("0"));
+                foreach (var tooltip in tips)
+                {
+                    tooltip.Hide();
+                }
+            }
+        }
     }
 }
 
@@ -74,6 +120,14 @@ public class RekSaiArmorPlayer : ModPlayer
     {
         Equipped = false;
         Echo = false;
+    }
+
+    public override void UpdateLifeRegen()
+    {
+        if (Equipped && (Player.ZoneRockLayerHeight || Player.ZoneDirtLayerHeight || Player.ZoneUnderworldHeight) && Player.pickSpeed <= 0.5f)
+        {
+            Player.lifeRegen += 2;
+        }
     }
 
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
@@ -271,8 +325,14 @@ public class EcholocationSystem : ModSystem
         if (Main.LocalPlayer.GetModPlayer<RekSaiArmorPlayer>().Echo)
         {
             Instance.SobelSettings.Power -= 0.02f * float.Sin(3 * Main.GlobalTimeWrappedHourly);
+            foreach (var entity in Main.npc)
+                Lighting.AddLight(entity.Center, new Vector3(1) * 30 * Instance.SobelSettings.Power / Instance.SobelSettings.PowerTarget);
+
+            foreach (var entity in Main.projectile)
+                Lighting.AddLight(entity.Center, new Vector3(1) * 30 * Instance.SobelSettings.Power / Instance.SobelSettings.PowerTarget);
+
             Lighting.AddLight(Main.LocalPlayer.Center, new Vector3(1) * 30 * Instance.SobelSettings.Power / Instance.SobelSettings.PowerTarget);
             EcholocationSystem.Instance.ApplySobelDarkening(0.3f, 10, 10, 0.075f, 1.2f + 0.2f * float.Sin(3 * Main.GlobalTimeWrappedHourly));
         }
     }
-}
+}*/

@@ -1531,24 +1531,44 @@ Items: {
 			'''
 	}
 
-	BleedingPendant: {
-		DisplayName: Bleeding Pendant
-		Tooltip: ""
-	}
-
 	BloodcourseMedallion: {
 		DisplayName: Bloodcourse Medallion
-		Tooltip: ""
+		Tooltip:
+			'''
+			Your natural life regeneration ramps up 150% faster and is 1.5x as strong
+			'Your heart will never stop'
+			'''
 	}
 
 	MicroPlanet: {
 		DisplayName: Micro Planet
-		Tooltip: ""
+		Tooltip:
+			'''
+			You are orbited by 6 damaging stars
+			'So small that you can hold it in your hand'
+			'''
 	}
 
 	UnnaturalScales: {
 		DisplayName: Unnatural Scales
-		Tooltip: ""
+		Tooltip:
+			'''
+			Transforms you into a monster, making you unable to equip armor
+			Grants stats (hold shift for more info)
+			Grants echolocation (turn off this accessory's visibility to turn it off)
+			'Taken off of a distant relative of Xer'sai. Be glad it's just a distant relative.'
+			'''
+		Shift:
+			'''
+			Grants the following stats:
+			+100 max life
+			+34 defense
+			+2 hp/s regeneration
+			+14% increased damage
+			+14% increased critical strike chance
+			+6 armor penetration
+			All the stats are increased by 50% if you are under the world's surface and have at least 50% increased mining speed
+			'''
 	}
 }
 

@@ -207,7 +207,7 @@ public class FulgurbloomTile : ModTile
             var start = pos.ToWorldCoordinates();
             var proj = Projectile.NewProjectileDirect(
                 new EntitySource_WorldEvent(), start, Vector2.Zero,
-                ModContent.ProjectileType<LightningBolt>(), 200,
+                ModContent.ProjectileType<LightningBolt>(), 33,
                 2, Main.myPlayer
             );
 

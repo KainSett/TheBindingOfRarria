@@ -1,3 +1,5 @@
+using Terraria.GameContent.ItemDropRules;
+
 namespace TheBindingOfRarria.Content.Items;
 
 public class BloodcourseMedallion : ModItem
@@ -9,7 +11,6 @@ public class BloodcourseMedallion : ModItem
         Item.width = 20;
         Item.height = 32;
         Item.accessory = true;
-        Item.lifeRegen = 2;
         Item.value = Item.sellPrice(0, 2);
         Item.expert = true;
     }
@@ -30,6 +31,17 @@ public class BloodcoursePlayer : ModPlayer
         {
             Player.lifeRegenTime += 1.5f;
             regen *= 1.5f;
+        }
+    }
+}
+public class CrateLootMedallion : GlobalItem
+{
+    public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
+    {
+        if (item.type == ItemID.JungleFishingCrateHard)
+        {
+            IItemDropRule rule = ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<BloodcourseMedallion>(), 5);
+            itemLoot.Add(rule);
         }
     }
 }

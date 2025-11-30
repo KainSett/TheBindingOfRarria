@@ -4,7 +4,7 @@ using TheBindingOfRarria.Content.Projectiles;
 
 namespace TheBindingOfRarria.Content.Items;
 
-public class MicroPlanet : ModItem
+/*public class MicroPlanet : ModItem
 {
     public override string Texture => ContentPath + "Items/" + Name;
     public override void SetDefaults()
@@ -25,4 +25,4 @@ public class MicroPlanet : ModItem
                 Projectile.NewProjectile(player.GetProjectileSource_Accessory(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<OrbitalStar>(), 40, 1, ai1: i);
         }
     }
-}
+}*/
