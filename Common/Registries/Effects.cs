@@ -24,6 +24,8 @@ public static class Effects
 
     public static readonly Asset<Effect> SobelDarken = LoadEffect("SobelDarken");
 
+    public static readonly Asset<Effect> Tint = LoadEffect("Tint");
+
     private static Asset<Effect> LoadEffect(string EffectPath)
     {
         if (Main.dedServ)

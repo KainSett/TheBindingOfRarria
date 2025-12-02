@@ -82,7 +82,6 @@ public class ArtifactSetSystem : ModSystem
             var effect = Effects.Outline;
             if (effect != null && effect.Value != null)
             {
-                var result = orig(item, context, spriteBatch, screenPositionForItemCenter, scale, sizeLimit, environmentColor);
                 var gd = Main.graphics.GraphicsDevice;
 
                 if (gd.PresentationParameters.RenderTargetUsage != RenderTargetUsage.PreserveContents)
@@ -98,8 +97,8 @@ public class ArtifactSetSystem : ModSystem
                         rt.RenderTargetUsage = RenderTargetUsage.PreserveContents;
                 }
 
-                gd.SetRenderTarget(Target);
-                gd.Clear(Color.Transparent);
+                //gd.SetRenderTarget(Target);
+                //gd.Clear(Color.Transparent);
 
 
                 var started = spriteBatch.beginCalled;
@@ -107,16 +106,24 @@ public class ArtifactSetSystem : ModSystem
                 if (started)
                     spriteBatch.End(out parameters);
 
-                effect.Value.Parameters["Scale"].SetValue(scale);
+                var buffer = 2f;
+                effect.Value.Parameters["Scale"].SetValue(1);
+                effect.Value.Parameters["Pixels"].SetValue(4f);
+                effect.Value.Parameters["ScaleBuffer"].SetValue(buffer);
                 effect.Value.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
                 effect.Value.Parameters["uImageSize0"].SetValue(!Main.itemAnimationsRegistered.Contains(item.type) ? TextureAssets.Item[item.type].Value.Size() : Main.itemAnimations[item.type].GetFrame(TextureAssets.Item[item.type].Value).Size());
+                effect.Value.Parameters["Color"].SetValue(environmentColor.MultiplyRGB(p.Sets.FirstOrDefault(s => s.Contains(item.type) && s.Count >= s.Artifacts.Count).NameColor).ToVector3()); 
+
+                //effect.Value.Parameters["color"].SetValue(environmentColor.MultiplyRGB(p.Sets.FirstOrDefault(s => s.Contains(item.type) && s.Count >= s.Artifacts.Count).NameColor).ToVector3()); 
+                //effect.Value.Parameters["opacity"].SetValue(1);
                 effect.Value.CurrentTechnique.Passes[0].Apply();
 
                 spriteBatch.Begin(parameters with { effect = effect.Value });
                 //var oldEffect = spriteBatch.customEffect;
                 //spriteBatch.customEffect = effect.Value;
 
-                spriteBatch.Draw(Target, Vector2.Zero, Color.White);
+                var result = orig(item, context, spriteBatch, screenPositionForItemCenter, scale * buffer, sizeLimit, environmentColor);
+                //spriteBatch.Draw(Target, Vector2.Zero, null, Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
 
                 spriteBatch.End();
 
@@ -124,7 +131,7 @@ public class ArtifactSetSystem : ModSystem
                     spriteBatch.Begin(parameters);
 
                 //spriteBatch.customEffect = oldEffect;
-                gd.SetRenderTargets(oldTargets);
+                //gd.SetRenderTargets(oldTargets);
 
                 return result;
             }

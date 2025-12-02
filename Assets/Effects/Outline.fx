@@ -21,32 +21,34 @@ float4 uSourceRect;
 float2 uZoom;
 float2 uImageSize0;
 float Scale;
+float ScaleBuffer;
+float Pixels;
+float4 Color;
 
 float4 Outline(float2 coords : TEXCOORD0) : COLOR0
 {
-    float2 uv = coords;
+    float2 uv = float2((coords.x - 0.5f) * ScaleBuffer + 0.5f, (coords.y - 0.5f) * ScaleBuffer + 0.5f);
     
-    float4 color = tex2D(uImage0, uv);
+    float4 color = abs(uv.x - 0.5f) > 0.5f || abs(uv.y - 0.5f) > 0.5f ? float4(0, 0, 0, 0) : tex2D(uImage0, uv);
     
     if (color.a != 0 || color.r != 0 || color.g != 0 || color.b != 0)
-    {
+    {   
         return color;
     }
     
-    float pixel = uImageSize0.x * Scale / uScreenResolution.x;
+    float pixel = Pixels * uImageSize0.x * Scale / uScreenResolution.x;
     
     float angle = 0.0f;
     for (float a = 4; a > 0.0f; a -= 1)
     {
         angle += 3.14f / 2.0f;
-        float2 testPoint = float2(pixel * cos(angle), pixel * sin(angle));
-        testPoint = clamp(uv + testPoint, float2(0, 0), uScreenResolution);
+        float2 testPoint = uv + float2(pixel * cos(angle), pixel * sin(angle));
         
-        color = tex2D(uImage0, testPoint);
+        color = abs(testPoint.x - 0.5f) > 0.5f || abs(testPoint.y - 0.5f) > 0.5f ? color.rgba : tex2D(uImage0, testPoint);
         
         if (color.a != 0 || color.r != 0 || color.g != 0 || color.b != 0)
         {
-            color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+            color = Color;
             break;
         }
         
