@@ -107,8 +107,8 @@ public class ArtifactSetSystem : ModSystem
                     spriteBatch.End(out parameters);
 
                 var buffer = 2f;
-                effect.Value.Parameters["Scale"].SetValue(1);
-                effect.Value.Parameters["Pixels"].SetValue(4f);
+                effect.Value.Parameters["Scale"].SetValue(scale);
+                effect.Value.Parameters["Pixels"].SetValue(3f);
                 effect.Value.Parameters["ScaleBuffer"].SetValue(buffer);
                 effect.Value.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
                 effect.Value.Parameters["uImageSize0"].SetValue(!Main.itemAnimationsRegistered.Contains(item.type) ? TextureAssets.Item[item.type].Value.Size() : Main.itemAnimations[item.type].GetFrame(TextureAssets.Item[item.type].Value).Size());

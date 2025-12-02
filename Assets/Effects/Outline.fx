@@ -36,7 +36,7 @@ float4 Outline(float2 coords : TEXCOORD0) : COLOR0
         return color;
     }
     
-    float pixel = Pixels * uImageSize0.x * Scale / uScreenResolution.x;
+    float pixel = Pixels * Scale / uImageSize0.x;
     
     float angle = 0.0f;
     for (float a = 4; a > 0.0f; a -= 1)
