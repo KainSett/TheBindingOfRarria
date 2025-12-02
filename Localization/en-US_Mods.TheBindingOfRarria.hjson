@@ -1570,6 +1570,11 @@ Items: {
 			All the stats are increased by 50% if you are under the world's surface and have at least 50% increased mining speed
 			'''
 	}
+
+	CovertCloak: {
+		DisplayName: Covert Cloak
+		Tooltip: ""
+	}
 }
 
 Buffs: {

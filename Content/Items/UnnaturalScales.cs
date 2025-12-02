@@ -282,35 +282,7 @@ public class EcholocationSystem : ModSystem
         LoadFilters();
         On_Main.DrawBG += On_Main_DrawBG;
         On_Main.DrawInfernoRings += On_Main_DrawInfernoRings;
-        if (!Main.dedServ)
-        {
-            Main.OnResolutionChanged += InitializeRT;
-            Main.RunOnMainThread(() =>
-            {
-                Target = new(Main.instance.GraphicsDevice,
-                    Main.screenWidth, Main.screenHeight,
-                    false, SurfaceFormat.Color, DepthFormat.None, 0,
-                    RenderTargetUsage.PreserveContents
-                );
-            });
-        }
     }
-
-    private static void InitializeRT(Vector2 obj)
-    {
-        if (Main.dedServ)
-            return;
-
-        Target?.Dispose();
-
-        GraphicsDevice gd = Main.instance.GraphicsDevice;
-        int width = Main.screenWidth;
-        int height = Main.screenHeight;
-
-        Target = new(gd, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
-    }
-
-    private static RenderTarget2D Target { get; set; }
 
     private void On_Main_DrawBG(On_Main.orig_DrawBG orig, Main self)
     {

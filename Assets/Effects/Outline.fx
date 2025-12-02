@@ -19,29 +19,37 @@ float2 uImageOffset;
 float uSaturation;
 float4 uSourceRect;
 float2 uZoom;
-float R = 8;
+float2 uImageSize0;
+float Scale;
 
-float4 Outline(float2 coords : TEXCOORD0) : SV_Target0
+float4 Outline(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 uv = coords;
     
     float4 color = tex2D(uImage0, uv);
     
-    if (color.a != 0.0f)
+    if (color.a != 0 || color.r != 0 || color.g != 0 || color.b != 0)
     {
-        return float4(0.0f, 0.0f, 0.0f, 1.0f);
+        return color;
     }
+    
+    float pixel = uImageSize0.x * Scale / uScreenResolution.x;
     
     float angle = 0.0f;
     for (float a = 4; a > 0.0f; a -= 1)
     {
         angle += 3.14f / 2.0f;
-        float2 testPoint = float2(R / uScreenResolution.x * cos(angle), R / uScreenResolution.y * sin(angle));
+        float2 testPoint = float2(pixel * cos(angle), pixel * sin(angle));
         testPoint = clamp(uv + testPoint, float2(0, 0), uScreenResolution);
         
-        color = float4(1.0f, 1.0f, 1.0f, tex2D(uImage0, testPoint).a);
-        if (color.a > 0.0f)
+        color = tex2D(uImage0, testPoint);
+        
+        if (color.a != 0 || color.r != 0 || color.g != 0 || color.b != 0)
+        {
+            color = float4(1.0f, 1.0f, 1.0f, 1.0f);
             break;
+        }
+        
     }
     
     return color;

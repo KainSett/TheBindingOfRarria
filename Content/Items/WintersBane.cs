@@ -11,7 +11,7 @@ public class WintersBane : ModItem
     public override void SetDefaults()
     {
         Item.accessory = true;
-        Item.width = 50;
+        Item.width = 48;
         Item.height = 50;
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.sellPrice(0, 0, 1, 20);

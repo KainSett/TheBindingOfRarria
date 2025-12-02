@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Tomat.Terraria.ModLoader.Sdk/1.0.8">
 
 	<!-- Import tModLoader mod properties -->
 	<Import Project="..\tModLoader.targets" />
@@ -6,6 +6,23 @@
 	<!-- General -->
 	<PropertyGroup>
 		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<!-- Hide this pesky warning -->
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+
+		<!-- Enable nullable types -->
+		<Nullable>enable</Nullable>
+
+		<TargetFramework>net9.0</TargetFramework>
+		<LangVersion>preview</LangVersion>
+
+		<!-- Currently have yet to port over to tml-build's source generation from ZourceGen -->
+		<TmlBuildIncludeSourceGenerators>false</TmlBuildIncludeSourceGenerators>
+
+		<!-- Type conflict with 'IgnoresAccessChecksToAttribute' -->
+		<NoWarn>CS0436</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,7 +45,7 @@
 	<ItemGroup>
 		<!-- Add every asset as an additional file so that our source generator can find it -->
 		<AdditionalFiles Include="Assets\**" />
-		<PackageReference Include="ZourceGen" Version="1.1.5" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+		<PackageReference Include="ZourceGen" Version="1.1.8" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
 	</ItemGroup>
 	
 	<!-- Global usings!!!!! -->
