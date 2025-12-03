@@ -17,14 +17,14 @@ public class CovertClone : ModNPC
 
     public override void SetDefaults()
     {
-        NPC.width = 24;
+        NPC.width = 21;
         NPC.height = 42;
         NPC.defense = 0;
         NPC.lifeMax = 1000;
         NPC.knockBackResist = 0f;
         NPC.rarity = 0;
         NPC.npcSlots = 0f;
-
+        NPC.friendly = true;
         NPC.aiStyle = -1;
     }
 
@@ -34,6 +34,26 @@ public class CovertClone : ModNPC
     }
 
     public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+    {
+        return false;
+    }
+
+    public override bool CanHitNPC(NPC target)
+    {
+        return false;
+    }
+
+    public override bool CanBeHitByNPC(NPC attacker)
+    {
+        return false;
+    }
+
+    public override bool? CanBeHitByProjectile(Projectile projectile)
+    {
+        return false;
+    }
+
+    public override bool? CanBeHitByItem(Player player, Item item)
     {
         return false;
     }

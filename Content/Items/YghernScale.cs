@@ -5,6 +5,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria;
 using TheBindingOfRarria.Content.Buffs;
+using System;
 
 namespace TheBindingOfRarria.Content.Items;
 
@@ -66,14 +67,14 @@ public class YghernAccPlayer : ModPlayer
         if (!Player.HasBuff(ModContent.BuffType<YghernBuff>()))
             Block = 0;
 
-        if (!Player.HasBuff(ModContent.BuffType<YghernBuff_CD>()))
+        if (!Player.HasBuff(ModContent.BuffType<YghernBuff_CD>()) && counter > 0)
             Player.AddBuff(ModContent.BuffType<YghernBuff_CD>(), counter);
 
         if (Block <= 0)
             Player.ClearBuff(ModContent.BuffType<YghernBuff>());
     }
 
-    public override void PostUpdate() => counter--;
+    public override void PostUpdate() => counter = Math.Max(0, counter - 1);
 
     public override void ModifyHurt(ref Player.HurtModifiers modifiers)
     {

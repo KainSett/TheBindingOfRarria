@@ -55,7 +55,7 @@ public class BulletGlobalProjectile : GlobalProjectile
     {
         Player owner = Main.player[projectile.owner];
 
-        if (!Bullet.Contains(projectile.type) && projectile.aiStyle == ProjAIStyleID.Arrow && projectile.friendly && !owner.HeldItem.IsAir && owner.HeldItem != null && owner.ChooseAmmo(owner.HeldItem).ammo == AmmoID.Bullet)
+        if (!Bullet.Contains(projectile.type) && projectile.aiStyle == ProjAIStyleID.Arrow && projectile.friendly && !owner.HeldItem.IsAir && owner.HeldItem != null && owner.ChooseAmmo(owner.HeldItem) != null && owner.ChooseAmmo(owner.HeldItem).ammo == AmmoID.Bullet)
             Bullet.Add(projectile.type);
         
     }

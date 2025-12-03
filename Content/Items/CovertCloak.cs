@@ -2,9 +2,12 @@
 using System;
 using System.Linq;
 using Terraria;
+using Terraria.GameContent.Achievements;
+using Terraria.GameInput;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader.Default;
 using TheBindingOfRarria.Content.NPCs;
+using static Terraria.Player;
 
 namespace TheBindingOfRarria.Content.Items;
 
@@ -65,6 +68,8 @@ public class CovertCloak : ModItem
 
 public class CovertCloakPlayer : ModPlayer
 {
+    public int counter = 0;
+
     public bool Equipped = false;
 
     public bool Still = false;
@@ -111,21 +116,42 @@ public class CovertCloakPlayer : ModPlayer
 
     public override void PostUpdate()
     {
-        if (Still && clone != null && Player.whoAmI != 250)
+        if (counter > 0)
         {
+            counter--;
+            if (cloneNPC != -1)
+                Main.npc[cloneNPC].StrikeInstantKill();
+            cloneNPC = -1;
+
+            clone?.position = Vector2.Zero;
+            clone?.aggro = -10000;
+        }
+        else if (Still && clone != null && Player.whoAmI != 250)
+        {
+            if (clone.statLife == 0)
+                counter = 36;
+
             if (cloneNPC == -1)
                 cloneNPC = NPC.NewNPC(NPC.GetSource_None(), (int)Player.Center.X, (int)Player.Center.Y, ModContent.NPCType<CovertClone>(), ai0: Player.whoAmI);
 
             clone.aggro = 2000;
-            var item = clone.inventory.FirstOrDefault(i => i.type == clone.HeldItem.type);
-            item = Player.HeldItem;
+            var item = Player.HeldItem.Clone();
+            clone.inventory[clone.selectedItem] = item;
             clone.whoAmI = 250;
             Main.player[250] = clone;
+            clone.buffTime = Player.buffTime;
+            clone.buffType = Player.buffType;
             clone.armor = Player.armor;
+            for (int i = 54; i < 58; i++)
+                clone.inventory[i] = Player.inventory[i].Clone();
+            clone.ConsumedLifeCrystals = Player.ConsumedLifeCrystals;
+            clone.ConsumedLifeFruit = Player.ConsumedLifeFruit;
+            clone.ConsumedManaCrystals = Player.ConsumedManaCrystals;
             clone.GetModPlayer<ModAccessorySlotPlayer>().exAccessorySlot = Player.GetModPlayer<ModAccessorySlotPlayer>().exAccessorySlot;
             clone.active = true;
             clone.heldProj = Player.heldProj;
             clone.controlUseItem = true;
+            clone.channel = true;
             clone.Update_NPCCollision();
             clone.UpdateControlHolds();
             PlayerLoader.PreUpdateBuffs(clone);
@@ -134,31 +160,68 @@ public class CovertCloakPlayer : ModPlayer
             clone.UpdateEquips(clone.whoAmI);
             clone.UpdateArmorSets(clone.whoAmI);
             PlayerLoader.PostUpdateEquips(clone);
-            clone.ItemCheckWrapped(clone.whoAmI);
             clone.PlayerFrame();
             PlayerLoader.PostUpdate(clone);
             if (!item.IsAir)
             {
-                var glob = item.GetGlobalItem<UseItemGlobalItem>();
-                if (glob.CanUseItem(item, clone))
+                var old = Main.myPlayer;
+                Main.myPlayer = clone.whoAmI;
+                if (CombinedHooks.CanShoot(clone, clone.HeldItem))
                 {
-                    ItemLoader.UseItem(item, clone);
-                    clone.ItemCheckWrapped(clone.whoAmI);
+                    //Player.PickAmmo(item, out var type, out var speed, out var dmg, out var kb, out var ammo, true);
+                    //var vel = clone.Center.DirectionTo(Main.MouseScreen + Main.screenPosition) * speed;
+                    //var pos = clone.Center;
+                    //ItemLoader.ModifyShootStats(item, clone, ref pos, ref vel, ref type, ref dmg, ref kb);
+                    //ItemLoader.Shoot(item, clone, new EntitySource_ItemUse_WithAmmo(clone, item, ammo), pos, vel, type, dmg, kb);
+
+                    //IEntitySource projectileSource_Item_WithPotentialAmmo = clone.GetProjectileSource_Item_WithPotentialAmmo(clone.HeldItem, ammo);
+                    //Projectile.NewProjectile(projectileSource_Item_WithPotentialAmmo, pos, vel, type, dmg, kb);
+
+                    bool flag = true;
+                    int type = clone.HeldItem.type;
+                    if ((type == 65 || type == 676 || type == 723 || type == 724 || type == 757 || type == 674 || type == 675 || type == 989 || type == 1226 || type == 1227) && !clone.ItemAnimationJustStarted)
+                    {
+                        flag = false;
+                    }
+                    if (type == 3852 && clone.altFunctionUse == 2 && !clone.ItemAnimationJustStarted)
+                    {
+                        flag = false;
+                    }
+                    if (type == 5451 && clone.ownedProjectileCounts[1020] > 0)
+                    {
+                        flag = false;
+                    }
+                    if (clone.HeldItem.useLimitPerAnimation.HasValue && clone.ItemUsesThisAnimation >= clone.HeldItem.useLimitPerAnimation.Value)
+                    {
+                        flag = false;
+                    }
+                    clone.ItemCheck_TurretAltFeatureUse(clone.HeldItem, flag);
+                    clone.ItemCheck_MinionAltFeatureUse(clone.HeldItem, flag);
+                    bool flag2 = clone.itemAnimation >= 0 && clone.ItemTimeIsZero && flag;
+                    if (clone.HeldItem.shootsEveryUse)
+                    {
+                        flag2 = clone.ItemAnimationJustStarted;
+                    }
+                    if (flag2)
+                    {
+                        clone.ItemCheck_Shoot(clone.whoAmI, clone.HeldItem, clone.HeldItem.damage);
+                        clone.ApplyItemAnimation(clone.HeldItem);
+                    }
+                    //clone.ApplyItemTime(clone.HeldItem);
+                    //
                 }
-                if (glob.CanShoot(clone.HeldItem, clone))
-                {
-                    clone.PickAmmo(item, out var type, out var speed, out var dmg, out var kb, out var ammo);
-                    var vel = clone.Center.DirectionTo(Main.MouseScreen + Main.screenPosition) * speed;
-                    var pos = clone.Center;
-                    glob.ModifyShootStats(item, clone, ref pos, ref vel, ref type, ref dmg, ref kb);
-                    glob.Shoot(item, clone, new EntitySource_ItemUse_WithAmmo(clone, item, ammo), pos, vel, type, dmg, kb);
-                }
+                clone.ItemCheckWrapped(clone.whoAmI);
+                clone.itemAnimation++;
+                clone.itemTime++;
+                Main.myPlayer = old;
             }
+            clone.HorizontalMovement();
         }
         else if (cloneNPC != -1)
         {
             Main.npc[cloneNPC].StrikeInstantKill();
             cloneNPC = -1;
+            counter = 60;
         }
     }
 
@@ -171,7 +234,7 @@ public class CovertCloakPlayer : ModPlayer
         if (Still && clone != null && cloneNPC != -1)
         {
             clone.position = Main.npc[cloneNPC].position;
-            clone.direction = Main.npc[cloneNPC].direction;
+            clone.direction = Main.npc[cloneNPC].direction == 0 ? clone.direction : Main.npc[cloneNPC].direction;
             clone.velocity = Main.npc[cloneNPC].velocity;
         }
     }
@@ -204,71 +267,5 @@ public class UseItemGlobalItem : GlobalItem
     {
         player.GetModPlayer<CovertCloakPlayer>().Still = false;
         return base.UseItem(item, player);
-    }
-}
-
-public class AggroOverrideCovertClone : GlobalNPC
-{
-    public override void Load()
-    {
-        On_NPC.AI += On_NPC_AI;
-    }
-
-    private void On_NPC_AI(On_NPC.orig_AI orig, NPC npc)
-    {
-        if (npc.target != -1 && Main.player[npc.target].TryGetModPlayer<CovertCloakPlayer>(out var p) && p.Still && p.clone != null)
-        {
-            npc.target = p.clone.whoAmI;
-
-            p.clone.position = Main.npc[p.cloneNPC].position;
-
-            orig(npc);
-
-            npc.target = p.clone.whoAmI;
-        }
-        else if (npc.target == 250)
-        {
-            orig(npc);
-        }
-        else orig(npc);
-    }
-
-    public override bool PreAI(NPC npc)
-    {
-        if (npc.target != -1 && Main.player[npc.target].TryGetModPlayer<CovertCloakPlayer>(out var p) && p.Still && p.clone != null)
-        {
-            npc.target = p.clone.whoAmI;
-
-            var boo = base.PreAI(npc);
-
-            npc.target = p.clone.whoAmI;
-
-            return boo;
-        }
-        else return base.PreAI(npc);
-    }
-
-    public override void AI(NPC npc)
-    {
-        if (npc.target != -1 && Main.player[npc.target].TryGetModPlayer<CovertCloakPlayer>(out var p) && p.Still && p.clone != null)
-        {
-            npc.target = p.clone.whoAmI;
-
-            base.AI(npc);
-
-            npc.target = p.clone.whoAmI;
-        }
-    }
-
-    public override void PostAI(NPC npc)
-    {
-        if (npc.target != -1 && Main.player[npc.target].TryGetModPlayer<CovertCloakPlayer>(out var p) && p.Still && p.clone != null)
-        {
-            npc.target = p.clone.whoAmI;
-
-            base.PostAI(npc);
-
-            npc.target = p.clone.whoAmI;
-        }
     }
 }

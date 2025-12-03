@@ -50,7 +50,7 @@ public class TalismanArrowProj : GlobalProjectile
     public override void OnSpawn(Projectile projectile, IEntitySource source)
     {
         var owner = Main.player[projectile.owner];
-        if (!owner.HeldItem.IsAir && owner.HeldItem != null && owner.ChooseAmmo(owner.HeldItem).ammo == AmmoID.Arrow && owner.TryGetModPlayer<ArrowTalismanPlayer>(out var p) && p.Yus)
+        if (!owner.HeldItem.IsAir && owner.HeldItem != null && owner.ChooseAmmo(owner.HeldItem) != null && owner.ChooseAmmo(owner.HeldItem).ammo == AmmoID.Arrow && owner.TryGetModPlayer<ArrowTalismanPlayer>(out var p) && p.Yus)
         {
             velocity = projectile.velocity * 1.2f;
             projectile.damage = (int)(1.2f * projectile.damage);
