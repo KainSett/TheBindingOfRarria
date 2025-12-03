@@ -186,7 +186,7 @@ public class FulgurbloomTile : ModTile
 
 
 
-        if (!Main.rand.NextBool(100))
+        if (!Main.rand.NextBool(300))
             return;
 
         Tile current = Main.tile[i, j];

@@ -28,35 +28,7 @@ public class ArtifactSetSystem : ModSystem
     public override void Load()
     {
         On_ItemSlot.DrawItemIcon += On_ItemSlot_DrawItemIcon;
-        if (!Main.dedServ)
-        {
-            Main.OnResolutionChanged += InitializeRT;
-            Main.RunOnMainThread(() =>
-            {
-                Target = new(Main.instance.GraphicsDevice,
-                    Main.screenWidth, Main.screenHeight,
-                    false, SurfaceFormat.Color, DepthFormat.None, 0,
-                    RenderTargetUsage.PreserveContents
-                );
-            });
-        }
     }
-
-    private static void InitializeRT(Vector2 obj)
-    {
-        if (Main.dedServ)
-            return;
-
-        Target?.Dispose();
-
-        GraphicsDevice gd = Main.instance.GraphicsDevice;
-        int width = Main.screenWidth;
-        int height = Main.screenHeight;
-
-        Target = new(gd, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
-    }
-
-    private static RenderTarget2D Target { get; set; }
 
     private float On_ItemSlot_DrawItemIcon(On_ItemSlot.orig_DrawItemIcon orig, Item item, int context, SpriteBatch spriteBatch, Vector2 screenPositionForItemCenter, float scale, float sizeLimit, Color environmentColor)
     {
@@ -82,24 +54,6 @@ public class ArtifactSetSystem : ModSystem
             var effect = Effects.Outline;
             if (effect != null && effect.Value != null)
             {
-                var gd = Main.graphics.GraphicsDevice;
-
-                if (gd.PresentationParameters.RenderTargetUsage != RenderTargetUsage.PreserveContents)
-                {
-                    gd.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
-                }
-
-                var oldTargets = gd.GetRenderTargets();
-
-                foreach (var target in oldTargets)
-                {
-                    if (target.RenderTarget is RenderTarget2D rt)
-                        rt.RenderTargetUsage = RenderTargetUsage.PreserveContents;
-                }
-
-                //gd.SetRenderTarget(Target);
-                //gd.Clear(Color.Transparent);
-
 
                 var started = spriteBatch.beginCalled;
                 var parameters = new Helper.SpritebatchParameters();
@@ -111,7 +65,8 @@ public class ArtifactSetSystem : ModSystem
                 effect.Value.Parameters["Pixels"].SetValue(3f);
                 effect.Value.Parameters["ScaleBuffer"].SetValue(buffer);
                 effect.Value.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
-                effect.Value.Parameters["uImageSize0"].SetValue(!Main.itemAnimationsRegistered.Contains(item.type) ? TextureAssets.Item[item.type].Value.Size() : Main.itemAnimations[item.type].GetFrame(TextureAssets.Item[item.type].Value).Size());
+                Main.GetItemDrawFrame(item.type, out var texture, out var frame);
+                effect.Value.Parameters["uImageSize0"].SetValue(frame.Size());
                 effect.Value.Parameters["Color"].SetValue(environmentColor.MultiplyRGB(p.Sets.FirstOrDefault(s => s.Contains(item.type) && s.Count >= s.Artifacts.Count).NameColor).ToVector3()); 
 
                 //effect.Value.Parameters["color"].SetValue(environmentColor.MultiplyRGB(p.Sets.FirstOrDefault(s => s.Contains(item.type) && s.Count >= s.Artifacts.Count).NameColor).ToVector3()); 
@@ -131,7 +86,6 @@ public class ArtifactSetSystem : ModSystem
                     spriteBatch.Begin(parameters);
 
                 //spriteBatch.customEffect = oldEffect;
-                //gd.SetRenderTargets(oldTargets);
 
                 return result;
             }
