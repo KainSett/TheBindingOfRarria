@@ -121,17 +121,29 @@ public class CovertCloakPlayer : ModPlayer
             item = Player.HeldItem;
             clone.whoAmI = 250;
             Main.player[250] = clone;
+            clone.armor = Player.armor;
+            clone.GetModPlayer<ModAccessorySlotPlayer>().exAccessorySlot = Player.GetModPlayer<ModAccessorySlotPlayer>().exAccessorySlot;
             clone.active = true;
             clone.heldProj = Player.heldProj;
             clone.controlUseItem = true;
-            clone.Update(clone.whoAmI);
+            clone.Update_NPCCollision();
+            clone.UpdateControlHolds();
+            PlayerLoader.PreUpdateBuffs(clone);
+            clone.UpdateBuffs(clone.whoAmI);
+            PlayerLoader.PostUpdateBuffs(clone);
+            clone.UpdateEquips(clone.whoAmI);
+            clone.UpdateArmorSets(clone.whoAmI);
+            PlayerLoader.PostUpdateEquips(clone);
+            clone.ItemCheckWrapped(clone.whoAmI);
+            clone.PlayerFrame();
+            PlayerLoader.PostUpdate(clone);
             if (!item.IsAir)
             {
                 var glob = item.GetGlobalItem<UseItemGlobalItem>();
                 if (glob.CanUseItem(item, clone))
                 {
-                    glob.UseItem(item, clone);
                     ItemLoader.UseItem(item, clone);
+                    clone.ItemCheckWrapped(clone.whoAmI);
                 }
                 if (glob.CanShoot(clone.HeldItem, clone))
                 {
@@ -142,8 +154,6 @@ public class CovertCloakPlayer : ModPlayer
                     glob.Shoot(item, clone, new EntitySource_ItemUse_WithAmmo(clone, item, ammo), pos, vel, type, dmg, kb);
                 }
             }
-            clone.armor = Player.armor;
-            clone.GetModPlayer<ModAccessorySlotPlayer>().exAccessorySlot = Player.GetModPlayer<ModAccessorySlotPlayer>().exAccessorySlot;
         }
         else if (cloneNPC != -1)
         {
@@ -162,6 +172,7 @@ public class CovertCloakPlayer : ModPlayer
         {
             clone.position = Main.npc[cloneNPC].position;
             clone.direction = Main.npc[cloneNPC].direction;
+            clone.velocity = Main.npc[cloneNPC].velocity;
         }
     }
 
