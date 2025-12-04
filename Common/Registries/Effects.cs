@@ -26,6 +26,8 @@ public static class Effects
 
     public static readonly Asset<Effect> Tint = LoadEffect("Tint");
 
+    public static readonly Asset<Effect> Glitch = LoadEffect("Glitch");
+
     private static Asset<Effect> LoadEffect(string EffectPath)
     {
         if (Main.dedServ)

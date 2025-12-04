@@ -230,6 +230,10 @@ public class PlayerRenderTarget : ModSystem
 
     private static RenderTarget2D ScaleTarget;
 
+    public static Effect? DrawEffect;
+
+    public static Action? DrawAction;
+
     public static bool ShouldSkip = false;
 
     public override void Load()
@@ -260,7 +264,7 @@ public class PlayerRenderTarget : ModSystem
         }
 
 
-        if (!headOnly && !Main.gameMenu && drawPlayer.TryGetModPlayer<ResizedPlayer>(out var p) == true && p.IsScaled)
+        if (!headOnly && !Main.gameMenu && drawPlayer.TryGetModPlayer<ResizedPlayer>(out var p) == true && (p.IsScaled || DrawEffect is not null || DrawAction is not null))
         {
             var Scale = drawPlayer.GetModPlayer<ResizedPlayer>().Scale;
 
@@ -300,7 +304,7 @@ public class PlayerRenderTarget : ModSystem
             drawPlayer.MountedCenter = mC;
             position = po;
         }
-        else if (headOnly && !Main.gameMenu && drawPlayer.TryGetModPlayer<ResizedPlayer>(out p) == true && p.IsScaled)
+        else if (headOnly && !Main.gameMenu && drawPlayer.TryGetModPlayer<ResizedPlayer>(out p) == true && (p.IsScaled || DrawEffect is not null || DrawAction is not null))
         {
             var Scale = drawPlayer.GetModPlayer<ResizedPlayer>().Scale;
 
@@ -380,8 +384,11 @@ public class PlayerRenderTarget : ModSystem
         beginned = Main.spriteBatch.beginCalled;
         if (beginned)
             Main.spriteBatch.End(out parameters);
-            
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer);
+
+        DrawAction?.Invoke();
+        DrawAction = null;
+
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, DrawEffect);
 
         Main.spriteBatch.Draw(Target, new Vector2(0, 0), Color.White);
 
@@ -391,6 +398,6 @@ public class PlayerRenderTarget : ModSystem
         if (beginned)
             Main.spriteBatch.Begin(parameters);
 
-
+        DrawEffect = null;
     }
 }

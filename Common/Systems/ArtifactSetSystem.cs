@@ -148,6 +148,17 @@ public interface IArtifactSet
             foreach (var it in tree)
                 i.Add(it.createItem.type);
 
+            List<int> a = [];
+            foreach (var result in i)
+            {
+                var branch = Array.FindAll(Main.recipe, (r => r.HasIngredient(result)));
+
+                foreach (var it in branch)
+                    a.Add(it.createItem.type);
+            }
+
+            i.AddRange(a);
+
             if (tree is null || i is null || i.Count <= 0)
             {
                 Artifacts.Add(c => c == item);
