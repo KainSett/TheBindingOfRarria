@@ -1556,7 +1556,7 @@ Items: {
 			Transforms you into a monster, making you unable to equip armor
 			Grants stats (hold shift for more info)
 			Grants echolocation (turn off this accessory's visibility to turn it off)
-			'Taken off of a distant relative of Xer'sai. Be glad it's just a distant relative.'
+			'Taken off of a distant relative of Xer'sai. Be glad it was just that.'
 			'''
 		Shift:
 			'''
@@ -1738,6 +1738,7 @@ Projectiles: {
 	MagmaShield.DisplayName: Magma Shield
 	BlackHoleAura.DisplayName: Black Hole Aura
 	OrbitalStar.DisplayName: Orbital Star
+	RekSaiSwing.DisplayName: Rek Sai Swing
 }
 
 Keybinds: {
@@ -1792,6 +1793,7 @@ NPCs: {
 
 	RedLeech.DisplayName: Red Leech
 	CovertClone.DisplayName: Covert Clone
+	RekSai.DisplayName: Rek Sai
 }
 
 ArtifactSets: {

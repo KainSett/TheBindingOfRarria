@@ -13,7 +13,7 @@ using TheBindingOfRarria.Common.Systems;
 
 namespace TheBindingOfRarria.Content.Items;
 
-/*public class UnnaturalScales : ModItem
+public class UnnaturalScales : ModItem
 {
     public override string Texture => ContentPath + "Items/" + Name;
 
@@ -307,4 +307,4 @@ public class EcholocationSystem : ModSystem
             EcholocationSystem.Instance.ApplySobelDarkening(0.3f, 10, 10, 0.075f, 1.2f + 0.2f * float.Sin(3 * Main.GlobalTimeWrappedHourly));
         }
     }
-}*/
+}

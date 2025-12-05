@@ -181,11 +181,11 @@ public static class ResizedPlayerUtils
 
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
         {
-            if (IsScaled && PlayerRenderTarget.ShouldSkip)
+            if ((IsScaled || PlayerRenderTarget.DrawEffect is not null || PlayerRenderTarget.DrawAction is not null) && PlayerRenderTarget.ShouldSkip)
             {
                 PlayerDrawLayers.HeldItem.Hide();
             }
-            else if (IsScaled)
+            else if (IsScaled || PlayerRenderTarget.DrawEffect is not null || PlayerRenderTarget.DrawAction is not null)
             {
                 foreach (var l in PlayerDrawLayers.VanillaLayers)
                 {

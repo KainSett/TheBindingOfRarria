@@ -93,7 +93,7 @@ public class CovertCloakPlayer : ModPlayer
     {
         if (Equipped && Effects.Glitch is not null && Effects.Glitch.Value is not null)
         {
-            var _glitchIntensity = 0.5f * Main.GameZoomTarget;
+            var _glitchIntensity = 0.2f * Main.GameZoomTarget;
             PlayerRenderTarget.DrawEffect = Effects.Glitch.Value;
             PlayerRenderTarget.DrawAction = () =>
             {
